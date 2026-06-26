@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🔥 西語鍛造 Daily Forge</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+:root{--bg:#0d0d18;--surface:#141428;--card:#1a1a35;--border:#2a2a50;--accent:#7b5ea7;--accent2:#a78bfa;--accent3:#c4b5fd;--gold:#f5c842;--green:#4ade80;--red:#f87171;--blue:#60a5fa;--text:#e2e8f0;--muted:#94a3b8;--dim:#64748b;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;min-height:100vh;padding-bottom:80px;}
+body::before{content:'';position:fixed;top:-20%;left:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(123,94,167,0.1) 0%,transparent 70%);pointer-events:none;}
+
+/* HEADER */
+.header{position:sticky;top:0;z-index:100;background:rgba(13,13,24,0.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--accent3);}
+.stats-row{display:flex;gap:10px;align-items:center;}
+.chip{display:flex;align-items:center;gap:5px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;}
+.chip .v{font-weight:700;color:var(--accent2);}
+.chip.s .v{color:var(--gold);}
+.chip.w .v{color:var(--green);}
+
+/* WRAP */
+.wrap{max-width:680px;margin:0 auto;padding:20px 14px;position:relative;z-index:1;}
+
+/* XP */
+.xp-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:18px;}
+.xp-top{display:flex;justify-content:space-between;margin-bottom:8px;}
+.xp-lbl{font-size:0.7rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.1em;text-transform:uppercase;}
+.xp-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.82rem;color:var(--gold);}
+.xp-track{height:7px;background:var(--surface);border-radius:999px;overflow:hidden;}
+.xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;transition:width 0.9s cubic-bezier(.4,0,.2,1);}
+.xp-lvl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;text-align:right;margin-top:6px;}
+
+/* VOICE BAR */
+.voice-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+.voice-bar label{font-size:0.75rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.voice-bar select{flex:1;min-width:120px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 8px;font-size:0.78rem;font-family:inherit;outline:none;}
+.voice-bar select:focus{border-color:var(--accent);}
+.vtest{background:rgba(123,94,167,0.2);border:1px solid var(--accent);color:var(--accent2);border-radius:8px;padding:5px 12px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all 0.15s;}
+.vtest:hover{background:rgba(123,94,167,0.35);}
+.vstatus{font-size:0.7rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
+.vstatus.ok{color:var(--green);}
+.vstatus.err{color:var(--red);}
+
+/* SECTION */
+.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
+.sec-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);font-family:'Space Grotesk',sans-serif;margin-bottom:12px;}
+.preset-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.ptag{font-size:0.72rem;padding:4px 10px;border-radius:999px;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Space Grotesk',sans-serif;background:transparent;transition:all 0.15s;}
+.ptag:hover{border-color:var(--accent);color:var(--accent2);}
+.ptag.on{border-color:var(--accent);color:var(--accent2);background:rgba(123,94,167,0.15);}
+.divider{height:1px;background:var(--border);margin:12px 0;}
+.add-row{display:flex;gap:8px;margin-bottom:12px;}
+.add-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 13px;color:var(--text);font-size:0.88rem;font-family:inherit;outline:none;transition:border-color 0.2s;}
+.add-row input:focus{border-color:var(--accent);}
+.add-row input::placeholder{color:var(--dim);}
+.btn{background:var(--accent);color:white;border:none;border-radius:10px;padding:9px 16px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn:hover{filter:brightness(1.15);transform:translateY(-1px);}
+.btn:active{transform:translateY(0);}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent2);filter:none;}
+.btn-sm{padding:6px 12px;font-size:0.75rem;border-radius:8px;}
+.vtags{display:flex;flex-wrap:wrap;gap:5px;min-height:28px;}
+.vtag{display:inline-flex;align-items:center;gap:5px;background:rgba(123,94,167,0.12);border:1px solid rgba(167,139,250,0.2);border-radius:999px;padding:3px 9px;font-size:0.78rem;color:var(--accent3);}
+.vtag .x{color:var(--dim);cursor:pointer;font-size:0.85rem;}
+.vtag .x:hover{color:var(--red);}
+.vcnt{font-size:0.72rem;color:var(--dim);margin-top:8px;font-family:'Space Grotesk',sans-serif;}
+.vcnt span{color:var(--green);font-weight:700;}
+
+/* GEN BUTTON */
+.gen-wrap{text-align:center;margin-bottom:18px;}
+.btn-gen{background:linear-gradient(135deg,#7b5ea7,#9333ea);font-size:1rem;padding:13px 36px;border-radius:14px;box-shadow:0 4px 24px rgba(123,94,167,0.35);letter-spacing:0.02em;}
+.btn-gen:hover{box-shadow:0 6px 32px rgba(123,94,167,0.5);}
+
+/* CHALLENGE CARD */
+.c-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:18px;position:relative;transition:border-color 0.3s;}
+.c-card.active{border-color:rgba(167,139,250,0.4);}
+.c-card.ok{border-color:rgba(74,222,128,0.4);}
+.c-card.so-so{border-color:rgba(245,200,66,0.35);}
+.c-card.rework{border-color:rgba(248,113,113,0.3);}
+
+/* SCENE HERO */
+.scene-block{position:relative;background:linear-gradient(135deg,rgba(123,94,167,0.25) 0%,rgba(26,26,53,0.8) 100%);padding:24px 20px 20px;border-bottom:1px solid var(--border);min-height:130px;display:flex;flex-direction:column;justify-content:flex-end;}
+.scene-emoji{font-size:3.5rem;position:absolute;top:16px;right:20px;line-height:1;filter:drop-shadow(0 0 12px rgba(167,139,250,0.4));}
+.scene-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.day-badge{background:var(--accent);color:white;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.68rem;letter-spacing:0.08em;padding:3px 10px;border-radius:999px;}
+.type-tag{font-size:0.68rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;letter-spacing:0.05em;}
+.scene-label{font-size:0.62rem;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;}
+.scene-text{font-size:1rem;line-height:1.65;color:var(--text);font-weight:400;max-width:80%;}
+.scene-text em{color:var(--accent3);font-style:normal;font-weight:600;}
+
+/* HINT WORDS */
+.hint-row{display:flex;flex-wrap:wrap;gap:5px;padding:12px 20px;background:rgba(255,255,255,0.015);border-bottom:1px solid var(--border);}
+.hint-lbl{font-size:0.62rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;width:100%;margin-bottom:5px;}
+.hw{font-size:0.78rem;color:var(--accent2);background:rgba(167,139,250,0.08);border:1px solid rgba(167,139,250,0.15);border-radius:6px;padding:3px 8px;font-family:'Space Grotesk',sans-serif;}
+
+/* INPUT */
+.input-zone{padding:14px 18px;border-bottom:1px solid var(--border);}
+.ans-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:13px 15px;color:var(--text);font-size:1.05rem;font-family:'Space Grotesk',sans-serif;outline:none;resize:none;min-height:68px;transition:border-color 0.2s;letter-spacing:0.01em;}
+.ans-input:focus{border-color:var(--accent);}
+.ans-input::placeholder{color:var(--dim);font-size:0.88rem;font-family:'Noto Sans TC',sans-serif;}
+.input-actions{display:flex;gap:8px;margin-top:9px;align-items:center;}
+.input-hint{flex:1;font-size:0.72rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
+.btn-submit{background:linear-gradient(135deg,var(--accent),#9333ea);font-size:0.88rem;padding:10px 22px;border-radius:12px;}
+
+/* FEEDBACK */
+.fb-zone{padding:16px 18px;display:none;}
+.fb-zone.vis{display:block;}
+.fb-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.fb-icon{font-size:1.4rem;}
+.fb-title{font-size:0.9rem;font-weight:600;}
+.fb-title.ok{color:var(--green);}
+.fb-title.so-so{color:var(--gold);}
+.fb-title.rework{color:var(--red);}
+.xp-gained{margin-left:auto;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.88rem;color:var(--gold);}
+.fb-body{font-size:0.85rem;line-height:1.75;color:var(--muted);white-space:pre-wrap;background:rgba(255,255,255,0.03);border-radius:10px;padding:11px 13px;border-left:3px solid var(--accent);}
+.fb-body.ok{border-left-color:var(--green);}
+.fb-body.so-so{border-left-color:var(--gold);}
+.fb-body.rework{border-left-color:var(--red);}
+
+/* MODEL BLOCK */
+.model-block{margin-top:12px;border:1px solid rgba(167,139,250,0.2);border-radius:12px;overflow:hidden;display:none;}
+.model-es-row{padding:12px 14px 10px;background:rgba(123,94,167,0.12);display:flex;align-items:center;gap:10px;}
+.model-es-text{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;color:var(--accent3);flex:1;}
+.play-btn{background:var(--accent);color:white;border:none;border-radius:8px;width:34px;height:34px;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
+.play-btn:hover{filter:brightness(1.2);}
+.play-btn.playing{background:var(--gold);}
+
+/* COLLAPSIBLE ROWS */
+.lang-row{border-top:1px solid var(--border);overflow:hidden;}
+.lang-toggle{width:100%;text-align:left;background:var(--surface);border:none;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;}
+.lang-toggle:hover{background:rgba(123,94,167,0.1);}
+.ltlbl{font-size:0.7rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.08em;text-transform:uppercase;}
+.ltarr{font-size:0.7rem;color:var(--dim);transition:transform 0.2s;}
+.lang-toggle.open .ltarr{transform:rotate(180deg);}
+.lang-content{max-height:0;overflow:hidden;transition:max-height 0.25s ease;padding:0 14px;font-size:0.88rem;color:var(--muted);line-height:1.6;}
+.lang-content.open{max-height:140px;padding:9px 14px 13px;}
+.en-text{color:var(--blue);font-family:'Space Grotesk',sans-serif;font-size:0.92rem;display:block;}
+.en-note{color:var(--dim);font-size:0.78rem;margin-top:4px;display:block;}
+
+.next-acts{display:flex;gap:8px;margin-top:14px;}
+
+/* LOADING */
+.loading-ov{display:none;position:absolute;inset:0;background:rgba(13,13,24,0.82);backdrop-filter:blur(4px);border-radius:20px;align-items:center;justify-content:center;flex-direction:column;gap:12px;z-index:10;}
+.loading-ov.vis{display:flex;}
+.spinner{width:30px;height:30px;border:3px solid var(--border);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-txt{font-size:0.78rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;}
+
+/* HISTORY */
+.history-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:18px;display:none;}
+.hist-list{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
+.hist-item{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;background:var(--surface);border-radius:10px;border-left:3px solid var(--border);font-size:0.8rem;}
+.hist-item.ok{border-left-color:var(--green);}
+.hist-item.so-so{border-left-color:var(--gold);}
+.hist-item.rework{border-left-color:var(--red);}
+.h-day{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.68rem;color:var(--dim);min-width:32px;}
+.h-ans{color:var(--accent3);font-family:'Space Grotesk',sans-serif;}
+.h-model{color:var(--dim);font-size:0.73rem;margin-top:2px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:9px 18px;font-size:0.82rem;color:var(--accent3);font-family:'Space Grotesk',sans-serif;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+@media(max-width:480px){.scene-emoji{font-size:2.8rem;top:12px;right:14px;}.scene-text{max-width:72%;}}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">🔥 西語鍛造</div>
+  <div class="stats-row">
+    <div class="chip s">🔥<span class="v" id="sStr">0</span></div>
+    <div class="chip w">📚<span class="v" id="sWrd">0</span></div>
+    <div class="chip">⚡<span class="v" id="sXP">0</span></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<div class="xp-box">
+  <div class="xp-top"><div class="xp-lbl">今日進度</div><div class="xp-num" id="xpDisp">0 / 100 XP</div></div>
+  <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+  <div class="xp-lvl" id="xpLvl">Lv.1 初鍛者</div>
+</div>
+
+<!-- VOICE BAR -->
+<div class="voice-bar">
+  <label>🔊 西語音源</label>
+  <select id="voiceSel"><option value="">偵測中…</option></select>
+  <button class="vtest" onclick="testVoice()">試聽</button>
+  <span class="vstatus" id="vStat">偵測中…</span>
+</div>
+
+<!-- VOCAB -->
+<div class="section">
+  <div class="sec-label">📖 我已學的詞彙庫</div>
+  <div class="preset-row" id="presetRow"></div>
+  <div class="divider"></div>
+  <div class="add-row">
+    <input type="text" id="vocabIn" placeholder="輸入西語單字，逗號或空格分隔" />
+    <button class="btn btn-sm" onclick="addVocab()">加入</button>
+  </div>
+  <div class="vtags" id="vtags"></div>
+  <div class="vcnt">已收錄 <span id="vcnt">0</span> 個詞 — AI 用這些詞出題</div>
+</div>
+
+<!-- GEN -->
+<div class="gen-wrap">
+  <button class="btn btn-gen" onclick="genChallenge()">✨ 出今日挑戰</button>
+</div>
+
+<!-- CHALLENGE CARD -->
+<div class="c-card" id="cCard" style="display:none">
+  <div class="loading-ov" id="loadOv">
+    <div class="spinner"></div>
+    <div class="loading-txt" id="loadTxt">AI 正在出題…</div>
+  </div>
+
+  <div class="scene-block">
+    <div class="scene-emoji" id="sceneEmoji">🌟</div>
+    <div class="scene-meta">
+      <div class="day-badge" id="dayBadge">Day 1</div>
+      <div class="type-tag" id="typeTag">造句挑戰</div>
+    </div>
+    <div class="scene-label">🎭 情境</div>
+    <div class="scene-text" id="sceneText">—</div>
+  </div>
+
+  <div class="hint-row" id="hintRow">
+    <div class="hint-lbl">💡 可使用的詞</div>
+  </div>
+
+  <div class="input-zone">
+    <textarea class="ans-input" id="ansIn" placeholder="直接用西語說出那個感覺…不要翻譯，就說" rows="3"></textarea>
+    <div class="input-actions">
+      <div class="input-hint" id="inputHint">哪怕只有一句也算</div>
+      <button class="btn btn-sm btn-ghost" onclick="skipIt()">跳過</button>
+      <button class="btn btn-sm btn-submit" onclick="submitAns()">送出 →</button>
+    </div>
+  </div>
+
+  <div class="fb-zone" id="fbZone">
+    <div class="fb-head">
+      <div class="fb-icon" id="fbIcon">—</div>
+      <div class="fb-title" id="fbTitle">—</div>
+      <div class="xp-gained" id="xpGain"></div>
+    </div>
+    <div class="fb-body" id="fbBody"></div>
+
+    <!-- MODEL: ES always visible -->
+    <div class="model-block" id="modelBlock">
+      <div class="model-es-row">
+        <div class="model-es-text" id="modelEs">—</div>
+        <button class="play-btn" id="playBtn" onclick="playModel()" title="朗讀西語">▶</button>
+      </div>
+
+      <!-- EN collapsible -->
+      <div class="lang-row">
+        <button class="lang-toggle" id="enTog" onclick="toggleLang('en')">
+          <span class="ltlbl">🇬🇧 English + 英西文法對照</span>
+          <span class="ltarr">▾</span>
+        </button>
+        <div class="lang-content" id="enCont">
+          <span class="en-text" id="modelEn">—</span>
+          <span class="en-note" id="enNote"></span>
+        </div>
+      </div>
+
+      <!-- ZH collapsible -->
+      <div class="lang-row">
+        <button class="lang-toggle" id="zhTog" onclick="toggleLang('zh')">
+          <span class="ltlbl">🈳 中文意思</span>
+          <span class="ltarr">▾</span>
+        </button>
+        <div class="lang-content" id="zhCont">
+          <span id="modelZh">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="next-acts">
+      <button class="btn btn-sm" onclick="genChallenge()">再一題 ➜</button>
+      <button class="btn btn-sm btn-ghost" onclick="scrollHist()">看紀錄</button>
+    </div>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="history-sec" id="histSec">
+  <div class="sec-label">📜 練習紀錄</div>
+  <div class="hist-list" id="histList"></div>
+</div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let ST={vocab:[],xp:0,streak:0,day:1,history:[],cur:null,lastDate:null};
+const PRESETS=[
+  {label:'📅 基礎高頻',words:['ser','estar','tener','ir','querer','poder','hacer','decir','ver','saber','venir','dar','haber','pasar','llegar','yo','tú','él','ella','nosotros','muy','bien','mal','hoy','aquí','esto','eso','sí','no','porque']},
+  {label:'❤️ 情感',words:['querer','amar','sentir','llorar','reír','feliz','triste','miedo','amor','corazón','extrañar','necesitar','desear','esperar','creer']},
+  {label:'🏠 日常',words:['casa','comer','beber','dormir','trabajar','hablar','escuchar','caminar','leer','escribir','tiempo','noche','mañana','agua','comida']},
+  {label:'👶 親子',words:['hijo','hija','madre','padre','familia','cuidar','jugar','abrazo','beso','te quiero','dormir','cuento','noche','juntos','crecer']},
+  {label:'🌑 黑暗情境',words:['oscuro','silencio','solo','sola','vacío','perder','olvidar','callar','esperar','morir','volver','quedar','nada','todo','nunca']},
+];
+let activeP=new Set();
+const LEVELS=[{min:0,lbl:'Lv.1 初鍛者',next:100},{min:100,lbl:'Lv.2 句子編者',next:250},{min:250,lbl:'Lv.3 語感覺醒',next:450},{min:450,lbl:'Lv.4 詞海衝浪',next:700},{min:700,lbl:'Lv.5 西語思考',next:1000},{min:1000,lbl:'Lv.6 直覺流',next:9999}];
+let esVoices=[];
+
+/* VOICE */
+function loadVoices(){
+  const all=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+  esVoices=all.filter(v=>v.lang&&v.lang.startsWith('es'));
+  const sel=document.getElementById('voiceSel');
+  const st=document.getElementById('vStat');
+  if(esVoices.length===0){
+    sel.innerHTML='<option value="">無西語語音</option>';
+    st.textContent='⚠️ 無音源（手機可能需到系統設定安裝）';
+    st.className='vstatus err';
+  } else {
+    sel.innerHTML=esVoices.map((v,i)=>`<option value="${i}">${v.name} (${v.lang})</option>`).join('');
+    st.textContent=`✓ ${esVoices.length} 個音源`;
+    st.className='vstatus ok';
+  }
+}
+function testVoice(){speak('Hola, esta es mi voz en español. ¿Cómo estás?');}
+function speak(text){
+  if(!window.speechSynthesis){toast('此裝置不支援語音');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  const idx=parseInt(document.getElementById('voiceSel').value);
+  if(esVoices[idx]){u.voice=esVoices[idx];u.lang=esVoices[idx].lang;}
+  else{u.lang='es-ES';}
+  u.rate=0.9;
+  window.speechSynthesis.speak(u);
+}
+function playModel(){
+  const txt=document.getElementById('modelEs').textContent;
+  if(!txt||txt==='—')return;
+  const btn=document.getElementById('playBtn');
+  btn.textContent='⏹';btn.classList.add('playing');
+  speak(txt);
+  setTimeout(()=>{btn.textContent='▶';btn.classList.remove('playing');},3500);
+}
+
+/* LANG TOGGLE */
+function toggleLang(l){
+  document.getElementById(l+'Tog').classList.toggle('open');
+  document.getElementById(l+'Cont').classList.toggle('open');
+}
+
+/* INIT */
+function init(){
+  const saved=localStorage.getItem('forge_v3');
+  if(saved){try{ST={...ST,...JSON.parse(saved)};}catch(e){}}
+  const today=new Date().toDateString();
+  if(ST.lastDate&&ST.lastDate!==today){
+    const yd=new Date();yd.setDate(yd.getDate()-1);
+    if(ST.lastDate!==yd.toDateString())ST.streak=0;
+  }
+  renderPresets();renderTags();renderStats();renderHistory();updateXP();
+  if(window.speechSynthesis){
+    if(speechSynthesis.getVoices().length)loadVoices();
+    else speechSynthesis.onvoiceschanged=loadVoices;
+    setTimeout(loadVoices,1000);
+  } else {
+    document.getElementById('vStat').textContent='不支援語音';
+    document.getElementById('vStat').className='vstatus err';
+  }
+}
+
+function save(){ST.lastDate=new Date().toDateString();localStorage.setItem('forge_v3',JSON.stringify(ST));}
+
+/* PRESETS */
+function renderPresets(){
+  const r=document.getElementById('presetRow');r.innerHTML='';
+  PRESETS.forEach((p,i)=>{
+    const b=document.createElement('button');
+    b.className='ptag'+(activeP.has(i)?' on':'');
+    b.textContent=p.label;b.onclick=()=>togglePreset(i);r.appendChild(b);
+  });
+}
+function togglePreset(i){
+  const p=PRESETS[i];
+  if(activeP.has(i)){activeP.delete(i);ST.vocab=ST.vocab.filter(w=>!p.words.includes(w));}
+  else{activeP.add(i);p.words.forEach(w=>{if(!ST.vocab.includes(w))ST.vocab.push(w);});}
+  renderPresets();renderTags();renderStats();save();
+}
+
+/* VOCAB */
+function addVocab(){
+  const inp=document.getElementById('vocabIn');
+  const raw=inp.value.trim().toLowerCase();
+  if(!raw)return;
+  const ws=raw.split(/[,，\s]+/).filter(w=>w.length>0);
+  let added=0;
+  ws.forEach(w=>{if(!ST.vocab.includes(w)){ST.vocab.push(w);added++;}});
+  inp.value='';
+  if(added)toast(`✓ 加入 ${added} 個詞`);
+  renderTags();renderStats();save();
+}
+function removeV(w){ST.vocab=ST.vocab.filter(x=>x!==w);renderTags();renderStats();save();}
+function renderTags(){
+  const c=document.getElementById('vtags');
+  document.getElementById('vcnt').textContent=ST.vocab.length;
+  if(!ST.vocab.length){c.innerHTML='<span style="color:var(--dim);font-size:0.78rem">選詞包或手動輸入</span>';return;}
+  c.innerHTML=ST.vocab.map(w=>`<span class="vtag"><span>${w}</span><span class="x" onclick="removeV(this.parentElement.parentElement.querySelector('span').textContent)">✕</span></span>`).join('');
+}
+
+/* STATS */
+function renderStats(){
+  document.getElementById('sStr').textContent=ST.streak;
+  document.getElementById('sWrd').textContent=ST.vocab.length;
+  document.getElementById('sXP').textContent=ST.xp;
+}
+function updateXP(){
+  const lv=LEVELS.filter(l=>ST.xp>=l.min).pop()||LEVELS[0];
+  const nx=LEVELS.find(l=>l.min>ST.xp);
+  const inLv=ST.xp-lv.min,need=nx?nx.min-lv.min:1;
+  const pct=Math.min(100,Math.round((inLv/need)*100));
+  document.getElementById('xpFill').style.width=pct+'%';
+  document.getElementById('xpDisp').textContent=nx?`${ST.xp} / ${nx.min} XP`:`${ST.xp} XP`;
+  document.getElementById('xpLvl').textContent=lv.lbl;
+}
+
+/* EMOJI PICKER */
+function pickEmoji(type,sit){
+  const t=(type+sit).toLowerCase();
+  if(t.includes('noche')||t.includes('夜')||t.includes('睡'))return'🌙';
+  if(t.includes('hijo')||t.includes('madre')||t.includes('親')||t.includes('子'))return'👶';
+  if(t.includes('oscuro')||t.includes('solo')||t.includes('黑')||t.includes('孤'))return'🌑';
+  if(t.includes('amor')||t.includes('querer')||t.includes('愛')||t.includes('情'))return'💜';
+  if(t.includes('llor')||t.includes('triste')||t.includes('悲')||t.includes('哭'))return'🌧️';
+  if(t.includes('reír')||t.includes('feliz')||t.includes('喜')||t.includes('笑'))return'✨';
+  if(t.includes('silenc')||t.includes('靜')||t.includes('沉默'))return'🕯️';
+  if(t.includes('決')||t.includes('堅'))return'🔥';
+  return'🌟';
+}
+
+/* GENERATE */
+async function genChallenge(){
+  if(ST.vocab.length<3){toast('⚠️ 至少需要 3 個詞');return;}
+  const card=document.getElementById('cCard');
+  const ov=document.getElementById('loadOv');
+  document.getElementById('loadTxt').textContent='AI 正在出題…';
+  card.style.display='block';card.className='c-card active';
+  ov.classList.add('vis');
+  document.getElementById('fbZone').className='fb-zone';
+  document.getElementById('modelBlock').style.display='none';
+  document.getElementById('ansIn').value='';
+
+  const prompt=`你是西語學習助教，學習者以繁體中文為母語，已知詞彙：${ST.vocab.join('、')}
+
+出一道造句挑戰，回傳JSON（不加任何說明或markdown符號）：
+{"situation":"情境（繁體中文20-40字，有畫面感和情緒，用<em>標記1-2個關鍵詞</em>）","type":"類型（5字內）","hintWords":["從詞庫選3-5個詞"],"notes":"提示（繁體中文不超過15字，鼓勵性）"}
+規則：不出現英文，情境能用詞庫造1-2句，要有情緒張力。`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const ch=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    ST.cur=ch;ST.day++;
+    document.getElementById('dayBadge').textContent=`Day ${ST.day}`;
+    document.getElementById('typeTag').textContent=ch.type||'造句挑戰';
+    document.getElementById('sceneText').innerHTML=ch.situation||'—';
+    document.getElementById('sceneEmoji').textContent=pickEmoji(ch.type||'',ch.situation||'');
+    document.getElementById('inputHint').textContent=ch.notes||'就說出來';
+    const hr=document.getElementById('hintRow');
+    hr.querySelectorAll('.hw').forEach(e=>e.remove());
+    (ch.hintWords||[]).forEach(w=>{const s=document.createElement('span');s.className='hw';s.textContent=w;hr.appendChild(s);});
+    ov.classList.remove('vis');
+    document.getElementById('ansIn').focus();
+    card.scrollIntoView({behavior:'smooth',block:'center'});
+  }catch(e){ov.classList.remove('vis');toast('⚠️ 出題失敗，請再試');console.error(e);}
+}
+
+/* SUBMIT */
+async function submitAns(){
+  const ans=document.getElementById('ansIn').value.trim();
+  if(!ans){toast('先寫出你的句子');return;}
+  if(!ST.cur){toast('請先生成挑戰');return;}
+  const ov=document.getElementById('loadOv');
+  document.getElementById('loadTxt').textContent='AI 批改中…';
+  ov.classList.add('vis');
+
+  const prompt=`你是西語批改助教，學習者詞彙庫：${ST.vocab.join('、')}
+情境：${(ST.cur.situation||'').replace(/<[^>]*>/g,'')}
+學習者句子：「${ans}」
+回傳JSON（不加說明或markdown）：
+{"rating":"ok或so-so或rework","icon":"ok=✨ so-so=💡 rework=🔧","title":"評語（繁體中文5-10字）","feedback":"回饋（繁體中文40-80字，聚焦語感，不提英文）","xp":數字,"modelEs":"示範西語句","modelEn":"這句對應英文","enNote":"英西文法對照一句話（繁體中文，說明英西相似結構，不超過30字）","modelZh":"繁體中文意思"}
+批改：鼓勵輸出，評語感不評文法對錯，feedback完全不出現英文。xp: ok=30 so-so=15 rework=5`;
+
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const data=await res.json();
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const fb=JSON.parse(raw.replace(/```json|```/g,'').trim());
+    const xpG=fb.xp||10;
+    ST.xp+=xpG;
+    if(fb.rating==='ok')ST.streak++;
+    ST.history.unshift({day:ST.day,answer:ans,rating:fb.rating,modelEs:fb.modelEs,timestamp:new Date().toLocaleDateString('zh-TW')});
+    if(ST.history.length>50)ST.history=ST.history.slice(0,50);
+    const card=document.getElementById('cCard');
+    card.className='c-card '+(fb.rating||'so-so');
+    document.getElementById('fbIcon').textContent=fb.icon||'💡';
+    document.getElementById('fbTitle').textContent=fb.title||'—';
+    document.getElementById('fbTitle').className='fb-title '+(fb.rating||'so-so');
+    document.getElementById('fbBody').textContent=fb.feedback||'—';
+    document.getElementById('fbBody').className='fb-body '+(fb.rating||'so-so');
+    document.getElementById('xpGain').textContent=`+${xpG} XP`;
+    if(fb.modelEs){
+      document.getElementById('modelEs').textContent=fb.modelEs;
+      document.getElementById('modelEn').textContent=fb.modelEn||'—';
+      document.getElementById('enNote').textContent=fb.enNote||'';
+      document.getElementById('modelZh').textContent=fb.modelZh||'—';
+      document.getElementById('modelBlock').style.display='block';
+      ['en','zh'].forEach(l=>{document.getElementById(l+'Tog').classList.remove('open');document.getElementById(l+'Cont').classList.remove('open');});
+      document.getElementById('playBtn').textContent='▶';document.getElementById('playBtn').classList.remove('playing');
+    }
+    document.getElementById('fbZone').className='fb-zone vis';
+    renderStats();updateXP();renderHistory();save();
+    ov.classList.remove('vis');
+    if(fb.rating==='ok')setTimeout(()=>toast(`✨ +${xpG} XP！太好了`),200);
+  }catch(e){ov.classList.remove('vis');toast('⚠️ 批改失敗，請再試');console.error(e);}
+}
+
+function skipIt(){ST.cur=null;document.getElementById('cCard').style.display='none';toast('跳過這題');}
+
+/* HISTORY */
+function renderHistory(){
+  const sec=document.getElementById('histSec'),list=document.getElementById('histList');
+  if(!ST.history.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  list.innerHTML=ST.history.slice(0,10).map(h=>`
+    <div class="hist-item ${h.rating}">
+      <div><div class="h-day">D${h.day}</div><div style="font-size:0.63rem;color:var(--dim)">${h.timestamp}</div></div>
+      <div style="flex:1"><div class="h-ans">${h.answer}</div>${h.modelEs?`<div class="h-model">✦ ${h.modelEs}</div>`:''}</div>
+    </div>`).join('');
+}
+function scrollHist(){document.getElementById('histSec').scrollIntoView({behavior:'smooth'});}
+
+/* TOAST */
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2300);}
+
+/* VOCAB REMOVE FIX */
+document.addEventListener('click',e=>{
+  if(e.target.classList.contains('x')){
+    const word=e.target.previousElementSibling?.textContent;
+    if(word){ST.vocab=ST.vocab.filter(x=>x!==word);renderTags();renderStats();save();}
+  }
+});
+
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('vocabIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();addVocab();}});
+  init();
+});
+</script>
+</body>
+</html>
