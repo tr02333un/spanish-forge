@@ -6,370 +6,661 @@
 <title>🔥 西語鍛造 Daily Forge</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
-:root{--bg:#0d0d18;--surface:#141428;--card:#1a1a35;--border:#2a2a50;--accent:#7b5ea7;--accent2:#a78bfa;--accent3:#c4b5fd;--gold:#f5c842;--green:#4ade80;--red:#f87171;--blue:#60a5fa;--text:#e2e8f0;--muted:#94a3b8;--dim:#64748b;}
+:root{
+  --bg:#0d0d18;--surface:#141428;--card:#1a1a35;--border:#2a2a50;
+  --accent:#7b5ea7;--accent2:#a78bfa;--accent3:#c4b5fd;
+  --gold:#f5c842;--green:#4ade80;--red:#f87171;--blue:#60a5fa;
+  --orange:#fb923c;--text:#e2e8f0;--muted:#94a3b8;--dim:#64748b;
+}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;min-height:100vh;padding-bottom:80px;}
-body::before{content:'';position:fixed;top:-20%;left:-10%;width:50%;height:50%;background:radial-gradient(ellipse,rgba(123,94,167,0.1) 0%,transparent 70%);pointer-events:none;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans TC',sans-serif;min-height:100vh;padding-bottom:100px;}
+body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;background:radial-gradient(ellipse,rgba(123,94,167,0.09) 0%,transparent 70%);pointer-events:none;}
 
-.header{position:sticky;top:0;z-index:100;background:rgba(13,13,24,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
-.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--accent3);}
-.logo span{color:var(--dim);font-weight:300;font-size:0.8rem;margin-left:6px;}
-.stats-row{display:flex;gap:8px;align-items:center;}
-.chip{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;}
+/* ── HEADER ── */
+.header{position:sticky;top:0;z-index:200;background:rgba(13,13,24,0.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1rem;color:var(--accent3);white-space:nowrap;}
+.logo span{color:var(--dim);font-weight:300;font-size:0.78rem;margin-left:5px;}
+.hstats{display:flex;gap:7px;align-items:center;}
+.chip{display:flex;align-items:center;gap:4px;background:var(--card);border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:0.73rem;font-family:'Space Grotesk',sans-serif;}
 .chip .v{font-weight:700;color:var(--accent2);}
 .chip.s .v{color:var(--gold);}
-.chip.w .v{color:var(--green);}
+.chip.done .v{color:var(--green);}
 
-.wrap{max-width:680px;margin:0 auto;padding:18px 14px;position:relative;z-index:1;}
+/* ── VIEWS ── */
+.view{display:none;}
+.view.active{display:block;}
+
+/* ── HOME VIEW ── */
+.home-wrap{max-width:700px;margin:0 auto;padding:18px 14px;}
 
 /* XP */
-.xp-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:16px;}
-.xp-top{display:flex;justify-content:space-between;margin-bottom:8px;}
-.xp-lbl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.1em;text-transform:uppercase;}
+.xp-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 18px;margin-bottom:14px;}
+.xp-top{display:flex;justify-content:space-between;margin-bottom:7px;}
+.xp-lbl{font-size:0.67rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.1em;text-transform:uppercase;}
 .xp-num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.82rem;color:var(--gold);}
 .xp-track{height:7px;background:var(--surface);border-radius:999px;overflow:hidden;}
 .xp-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:999px;transition:width 0.9s cubic-bezier(.4,0,.2,1);}
-.xp-lvl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;text-align:right;margin-top:6px;}
+.xp-row2{display:flex;justify-content:space-between;margin-top:7px;align-items:center;}
+.xp-lvl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
+.streak-badge{display:flex;align-items:center;gap:5px;font-family:'Space Grotesk',sans-serif;font-size:0.75rem;color:var(--gold);}
+.streak-badge.big{font-size:0.9rem;font-weight:700;}
 
 /* VOICE */
-.voice-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-.voice-bar label{font-size:0.75rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
-.voice-bar select{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 8px;font-size:0.78rem;font-family:inherit;outline:none;}
+.voice-bar{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:9px 14px;display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.voice-bar label{font-size:0.73rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.voice-bar select{flex:1;min-width:100px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);padding:5px 8px;font-size:0.77rem;font-family:inherit;outline:none;}
 .voice-bar select:focus{border-color:var(--accent);}
-.vtest{background:rgba(123,94,167,0.2);border:1px solid var(--accent);color:var(--accent2);border-radius:8px;padding:5px 12px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;white-space:nowrap;}
+.vtest{background:rgba(123,94,167,0.2);border:1px solid var(--accent);color:var(--accent2);border-radius:8px;padding:5px 12px;font-size:0.73rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;}
 .vtest:hover{background:rgba(123,94,167,0.35);}
 .vstatus{font-size:0.7rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
 .vstatus.ok{color:var(--green);}
 .vstatus.err{color:var(--red);}
 
-/* CATEGORY FILTER */
-.cat-section{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:16px;}
-.sec-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);font-family:'Space Grotesk',sans-serif;margin-bottom:10px;}
-.cat-row{display:flex;flex-wrap:wrap;gap:6px;}
-.cat-btn{font-size:0.75rem;padding:5px 12px;border-radius:999px;border:1px solid var(--border);color:var(--muted);cursor:pointer;font-family:'Space Grotesk',sans-serif;background:transparent;transition:all 0.15s;}
-.cat-btn:hover{border-color:var(--accent);color:var(--accent2);}
-.cat-btn.on{border-color:var(--accent);color:var(--accent2);background:rgba(123,94,167,0.18);}
+/* FULL-STREAK BANNER */
+.streak-banner{background:linear-gradient(135deg,rgba(245,200,66,0.12),rgba(251,146,60,0.08));border:1px solid rgba(245,200,66,0.3);border-radius:14px;padding:14px 18px;margin-bottom:14px;display:none;}
+.streak-banner.vis{display:flex;align-items:center;gap:12px;}
+.sb-icon{font-size:2rem;}
+.sb-text .sb-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.95rem;color:var(--gold);}
+.sb-text .sb-sub{font-size:0.78rem;color:var(--muted);margin-top:3px;}
 
-/* PROGRESS */
-.progress-row{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);}
-.prog-lbl{font-size:0.72rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
-.prog-bar{flex:1;height:5px;background:var(--surface);border-radius:999px;overflow:hidden;}
-.prog-fill{height:100%;background:var(--accent2);border-radius:999px;transition:width 0.5s;}
-.prog-num{font-size:0.72rem;color:var(--accent2);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+/* CATEGORY GRID */
+.cat-grid-label{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);font-family:'Space Grotesk',sans-serif;margin-bottom:10px;}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.cat-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px 14px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;}
+.cat-card::before{content:'';position:absolute;inset:0;background:var(--cat-color,rgba(123,94,167,0.0));transition:background 0.2s;}
+.cat-card:hover{border-color:var(--accent2);transform:translateY(-2px);box-shadow:0 6px 24px rgba(123,94,167,0.2);}
+.cat-card:hover::before{background:rgba(123,94,167,0.06);}
+.cat-emoji-big{font-size:2rem;margin-bottom:8px;display:block;}
+.cat-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:0.88rem;color:var(--text);margin-bottom:4px;}
+.cat-count{font-size:0.72rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
+.cat-prog{margin-top:8px;height:4px;background:var(--surface);border-radius:999px;overflow:hidden;}
+.cat-prog-fill{height:100%;background:var(--accent2);border-radius:999px;transition:width 0.4s;}
+.cat-done-badge{position:absolute;top:10px;right:10px;background:var(--green);color:#0a2010;font-size:0.6rem;font-family:'Space Grotesk',sans-serif;font-weight:700;padding:2px 7px;border-radius:999px;}
 
-/* GEN */
-.gen-wrap{text-align:center;margin-bottom:16px;}
-.btn-gen{background:linear-gradient(135deg,#7b5ea7,#9333ea);color:white;border:none;font-size:1rem;padding:13px 36px;border-radius:14px;box-shadow:0 4px 24px rgba(123,94,167,0.35);letter-spacing:0.02em;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600;transition:all 0.2s;}
-.btn-gen:hover{box-shadow:0 6px 32px rgba(123,94,167,0.5);transform:translateY(-1px);}
+/* PASAPORTE PREVIEW */
+.pasaporte-btn{width:100%;background:linear-gradient(135deg,rgba(245,200,66,0.1),rgba(123,94,167,0.1));border:1px solid rgba(245,200,66,0.25);border-radius:14px;padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:all 0.2s;margin-bottom:10px;}
+.pasaporte-btn:hover{border-color:var(--gold);transform:translateY(-1px);}
+.pb-icon{font-size:1.6rem;}
+.pb-text .pb-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.9rem;color:var(--gold);}
+.pb-text .pb-sub{font-size:0.75rem;color:var(--muted);margin-top:2px;}
+.pb-arrow{margin-left:auto;color:var(--dim);font-size:0.9rem;}
 
-/* CARD */
-.c-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:16px;transition:border-color 0.3s;}
-.c-card.active{border-color:rgba(167,139,250,0.4);}
-.c-card.ok{border-color:rgba(74,222,128,0.4);}
-.c-card.so-so{border-color:rgba(245,200,66,0.35);}
-.c-card.rework{border-color:rgba(248,113,113,0.3);}
+/* ── CATEGORY VIEW ── */
+.cat-view-wrap{max-width:700px;margin:0 auto;padding:16px 14px;}
 
-/* SCENE */
-.scene{position:relative;background:linear-gradient(135deg,rgba(123,94,167,0.28) 0%,rgba(26,26,53,0.7) 100%);padding:22px 20px 18px;border-bottom:1px solid var(--border);min-height:120px;display:flex;flex-direction:column;justify-content:flex-end;}
-.scene-emoji{font-size:3.2rem;position:absolute;top:14px;right:18px;line-height:1;filter:drop-shadow(0 0 10px rgba(167,139,250,0.5));}
-.scene-meta{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.day-badge{background:var(--accent);color:white;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.68rem;letter-spacing:0.08em;padding:3px 10px;border-radius:999px;}
-.cat-tag{font-size:0.68rem;color:var(--muted);font-family:'Space Grotesk',sans-serif;}
-.scene-lbl{font-size:0.6rem;color:var(--dim);letter-spacing:0.12em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;}
-.scene-txt{font-size:1rem;line-height:1.65;color:var(--text);max-width:80%;}
-.scene-txt em{color:var(--accent3);font-style:normal;font-weight:600;}
+.back-btn{display:flex;align-items:center;gap:8px;background:transparent;border:none;color:var(--muted);font-family:'Space Grotesk',sans-serif;font-size:0.85rem;cursor:pointer;padding:0;margin-bottom:16px;transition:color 0.15s;}
+.back-btn:hover{color:var(--accent2);}
 
-/* CHUNK BLOCK */
-.chunk-block{padding:12px 18px;background:rgba(255,255,255,0.018);border-bottom:1px solid var(--border);}
-.chunk-lbl{font-size:0.6rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;}
-.chunk-card{background:var(--surface);border:1px solid rgba(167,139,250,0.2);border-radius:12px;padding:14px 16px;}
-.chunk-es{font-family:'Space Grotesk',sans-serif;font-size:1.3rem;font-weight:700;color:var(--accent3);margin-bottom:6px;display:flex;align-items:center;gap:10px;}
-.chunk-play{background:var(--accent);color:white;border:none;border-radius:7px;width:30px;height:30px;font-size:0.8rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;}
-.chunk-play:hover{filter:brightness(1.2);}
-.chunk-play.playing{background:var(--gold);}
+.cat-header{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;margin-bottom:16px;}
+.ch-top{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.ch-emoji{font-size:2.8rem;filter:drop-shadow(0 0 8px rgba(167,139,250,0.4));}
+.ch-info .ch-name{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent3);}
+.ch-info .ch-sub{font-size:0.78rem;color:var(--muted);margin-top:4px;}
+.ch-prog-row{display:flex;align-items:center;gap:10px;}
+.ch-prog-bar{flex:1;height:6px;background:var(--surface);border-radius:999px;overflow:hidden;}
+.ch-prog-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width 0.5s;}
+.ch-prog-num{font-size:0.73rem;color:var(--accent2);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
 
-/* COLLAPSIBLE */
-.lang-row{border-top:1px solid var(--border);overflow:hidden;}
-.lang-row:first-of-type{border-top:1px solid rgba(167,139,250,0.15);margin-top:8px;}
-.ltog{width:100%;text-align:left;background:transparent;border:none;padding:8px 0;display:flex;align-items:center;justify-content:space-between;cursor:pointer;}
-.ltog:hover .ltlbl{color:var(--accent2);}
-.ltlbl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.08em;text-transform:uppercase;transition:color 0.15s;}
-.ltarr{font-size:0.7rem;color:var(--dim);transition:transform 0.2s;}
+/* CHUNK CARDS LIST */
+.chunks-list{display:flex;flex-direction:column;gap:14px;}
+
+.chunk-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color 0.25s;}
+.chunk-card.seen{border-color:rgba(74,222,128,0.3);}
+
+/* Scene / illustration */
+.ck-scene{position:relative;padding:18px 18px 14px;background:linear-gradient(135deg,rgba(123,94,167,0.22) 0%,rgba(26,26,53,0.6) 100%);border-bottom:1px solid var(--border);min-height:90px;display:flex;align-items:flex-end;}
+.ck-illus{position:absolute;top:0;right:0;bottom:0;width:90px;display:flex;align-items:center;justify-content:center;font-size:3rem;filter:drop-shadow(0 0 10px rgba(167,139,250,0.35));pointer-events:none;}
+.ck-scene-txt{font-size:0.9rem;line-height:1.65;color:var(--text);max-width:calc(100% - 90px);}
+.ck-scene-txt em{color:var(--accent3);font-style:normal;font-weight:600;}
+
+/* ES headline */
+.ck-es-row{padding:14px 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
+.ck-es{font-family:'Space Grotesk',sans-serif;font-size:1.25rem;font-weight:700;color:var(--accent3);flex:1;line-height:1.3;}
+.play-btn{background:var(--accent);color:white;border:none;border-radius:8px;min-width:32px;height:32px;font-size:0.82rem;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s;padding:0 8px;gap:4px;font-family:'Space Grotesk',sans-serif;}
+.play-btn:hover{filter:brightness(1.2);}
+.play-btn.playing{background:var(--gold);color:#1a1a00;}
+
+/* BREAKDOWN TABLE */
+.breakdown{padding:12px 16px;border-bottom:1px solid var(--border);}
+.bd-label{font-size:0.62rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;}
+.bd-table{width:100%;border-collapse:collapse;}
+.bd-table th{font-size:0.67rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.06em;text-transform:uppercase;text-align:left;padding:0 0 6px;border-bottom:1px solid var(--border);}
+.bd-table td{padding:7px 0;border-bottom:1px solid rgba(42,42,80,0.5);vertical-align:top;}
+.bd-table tr:last-child td{border-bottom:none;}
+.td-chunk{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;color:var(--accent3);font-weight:600;width:38%;padding-right:8px;}
+.td-zh{font-size:0.85rem;color:var(--muted);width:30%;padding-right:8px;}
+.td-role{font-size:0.72rem;color:var(--dim);width:32%;}
+.td-role span{background:rgba(123,94,167,0.15);border:1px solid rgba(167,139,250,0.15);border-radius:5px;padding:2px 6px;font-family:'Space Grotesk',sans-serif;}
+
+/* LANG ROWS */
+.lang-rows{border-bottom:1px solid var(--border);}
+.ltog{width:100%;text-align:left;background:var(--surface);border:none;padding:9px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.15s;}
+.ltog:hover{background:rgba(123,94,167,0.08);}
+.ltlbl{font-size:0.68rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.08em;text-transform:uppercase;}
+.ltarr{font-size:0.68rem;color:var(--dim);transition:transform 0.2s;}
 .ltog.open .ltarr{transform:rotate(180deg);}
-.lcont{max-height:0;overflow:hidden;transition:max-height 0.25s ease;}
-.lcont.open{max-height:120px;padding-bottom:8px;}
-.en-text{color:var(--blue);font-family:'Space Grotesk',sans-serif;font-size:0.92rem;display:block;}
-.en-note{color:var(--dim);font-size:0.78rem;margin-top:4px;display:block;line-height:1.5;}
+.lcont{max-height:0;overflow:hidden;transition:max-height 0.28s ease;background:rgba(255,255,255,0.018);}
+.lcont.open{max-height:160px;}
+.lcont-inner{padding:10px 16px 13px;}
+.en-text{color:var(--blue);font-family:'Space Grotesk',sans-serif;font-size:0.9rem;display:block;margin-bottom:5px;}
+.en-note{color:var(--dim);font-size:0.78rem;line-height:1.55;display:block;}
 .zh-text{color:var(--muted);font-size:0.9rem;line-height:1.6;}
 
-/* INPUT */
-.input-zone{padding:14px 18px;border-bottom:1px solid var(--border);}
-.input-lbl{font-size:0.68rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;}
-.ans-input{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);font-size:1rem;font-family:'Space Grotesk',sans-serif;outline:none;resize:none;min-height:64px;transition:border-color 0.2s;}
-.ans-input:focus{border-color:var(--accent);}
-.ans-input::placeholder{color:var(--dim);font-size:0.88rem;font-family:'Noto Sans TC',sans-serif;}
-.input-actions{display:flex;gap:8px;margin-top:9px;align-items:center;}
-.input-hint{flex:1;font-size:0.72rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;}
+/* MODEL SENTENCE */
+.model-row{padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.model-lbl{font-size:0.62rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.model-es{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;color:var(--green);flex:1;}
 
-.btn{color:white;border:none;border-radius:10px;padding:9px 16px;font-size:0.82rem;font-family:'Space Grotesk',sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-.btn:hover{filter:brightness(1.12);transform:translateY(-1px);}
-.btn:active{transform:translateY(0);}
-.btn-primary{background:var(--accent);}
-.btn-submit{background:linear-gradient(135deg,var(--accent),#9333ea);font-size:0.88rem;padding:10px 22px;border-radius:12px;}
-.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--muted);}
-.btn-ghost:hover{border-color:var(--accent);color:var(--accent2);filter:none;}
-.btn-sm{padding:6px 12px;font-size:0.75rem;border-radius:8px;}
+/* SEEN BUTTON */
+.ck-footer{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.btn-seen{background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
+.btn-seen:hover{border-color:var(--green);color:var(--green);}
+.chunk-card.seen .btn-seen{border-color:var(--green);color:var(--green);background:rgba(74,222,128,0.08);}
+.xp-tag{font-size:0.72rem;color:var(--gold);font-family:'Space Grotesk',sans-serif;}
 
-/* FEEDBACK */
-.fb-zone{padding:14px 18px;display:none;}
-.fb-zone.vis{display:block;}
-.fb-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.fb-icon{font-size:1.4rem;}
-.fb-title{font-size:0.9rem;font-weight:600;}
-.fb-title.ok{color:var(--green);}
-.fb-title.so-so{color:var(--gold);}
-.fb-title.rework{color:var(--red);}
-.xp-gained{margin-left:auto;font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.88rem;color:var(--gold);}
-.fb-body{font-size:0.85rem;line-height:1.75;color:var(--muted);background:rgba(255,255,255,0.03);border-radius:10px;padding:11px 13px;border-left:3px solid var(--accent);margin-bottom:10px;}
-.fb-body.ok{border-left-color:var(--green);}
-.fb-body.so-so{border-left-color:var(--gold);}
-.fb-body.rework{border-left-color:var(--red);}
+/* ── PASAPORTE VIEW ── */
+.pasaporte-wrap{max-width:700px;margin:0 auto;padding:16px 14px;}
 
-/* ANSWER REVIEW */
-.answer-review{background:rgba(167,139,250,0.06);border:1px solid rgba(167,139,250,0.15);border-radius:10px;padding:12px 14px;margin-bottom:10px;}
-.review-row{display:flex;gap:8px;align-items:baseline;margin-bottom:4px;}
-.review-lbl{font-size:0.62rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;letter-spacing:0.1em;text-transform:uppercase;min-width:36px;}
-.review-txt{font-size:0.9rem;}
-.review-txt.yours{color:var(--accent3);font-family:'Space Grotesk',sans-serif;}
-.review-txt.model{color:var(--green);font-family:'Space Grotesk',sans-serif;}
+.pasaporte-header{background:linear-gradient(135deg,rgba(245,200,66,0.12),rgba(123,94,167,0.08));border:1px solid rgba(245,200,66,0.25);border-radius:16px;padding:18px;margin-bottom:16px;}
+.ph-top{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+.ph-icon{font-size:2.5rem;}
+.ph-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.1rem;color:var(--gold);}
+.ph-sub{font-size:0.78rem;color:var(--muted);margin-top:3px;}
 
-.next-acts{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+/* Streak calendar */
+.streak-cal{margin-bottom:12px;}
+.sc-label{font-size:0.67rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;margin-bottom:8px;}
+.sc-dots{display:flex;gap:5px;flex-wrap:wrap;}
+.sc-dot{width:22px;height:22px;border-radius:5px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-family:'Space Grotesk',sans-serif;color:var(--dim);}
+.sc-dot.done{background:rgba(74,222,128,0.2);border-color:rgba(74,222,128,0.4);color:var(--green);}
+.sc-dot.today{border-color:var(--accent2);color:var(--accent2);}
 
-/* HISTORY */
-.history-sec{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:16px;display:none;}
-.hist-list{display:flex;flex-direction:column;gap:7px;margin-top:10px;}
-.hist-item{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;background:var(--surface);border-radius:10px;border-left:3px solid var(--border);font-size:0.8rem;}
-.hist-item.ok{border-left-color:var(--green);}
-.hist-item.so-so{border-left-color:var(--gold);}
-.hist-item.rework{border-left-color:var(--red);}
-.h-meta{min-width:36px;}
-.h-day{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:0.68rem;color:var(--dim);}
-.h-date{font-size:0.62rem;color:var(--dim);}
-.h-ans{color:var(--accent3);font-family:'Space Grotesk',sans-serif;}
-.h-chunk{color:var(--dim);font-size:0.73rem;margin-top:2px;}
+/* bonus milestones */
+.bonus-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.bonus-chip{display:flex;align-items:center;gap:5px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:0.75rem;font-family:'Space Grotesk',sans-serif;}
+.bonus-chip .bc-streak{color:var(--gold);font-weight:700;}
+.bonus-chip .bc-xp{color:var(--accent2);}
+.bonus-chip.reached{border-color:var(--gold);background:rgba(245,200,66,0.08);}
 
-.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:9px 18px;font-size:0.82rem;color:var(--accent3);font-family:'Space Grotesk',sans-serif;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;white-space:nowrap;}
+/* history list */
+.hist-section-lbl{font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);font-family:'Space Grotesk',sans-serif;margin-bottom:10px;margin-top:16px;}
+.hist-list{display:flex;flex-direction:column;gap:8px;}
+.hist-item{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;display:flex;align-items:center;gap:12px;}
+.hi-emoji{font-size:1.4rem;flex-shrink:0;}
+.hi-body{flex:1;}
+.hi-chunk{font-family:'Space Grotesk',sans-serif;font-size:0.9rem;color:var(--accent3);font-weight:600;}
+.hi-cat{font-size:0.72rem;color:var(--dim);margin-top:2px;}
+.hi-date{font-size:0.7rem;color:var(--dim);font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
+.hi-xp{font-size:0.78rem;color:var(--gold);font-family:'Space Grotesk',sans-serif;font-weight:700;white-space:nowrap;}
+
+.empty-hist{text-align:center;padding:32px 20px;color:var(--dim);font-size:0.88rem;}
+
+/* BOTTOM NAV */
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(13,13,24,0.96);backdrop-filter:blur(14px);border-top:1px solid var(--border);display:flex;z-index:200;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;background:transparent;border:none;cursor:pointer;color:var(--dim);font-family:'Space Grotesk',sans-serif;font-size:0.65rem;letter-spacing:0.04em;transition:color 0.15s;}
+.nav-btn:hover{color:var(--accent2);}
+.nav-btn.active{color:var(--accent2);}
+.nav-btn .nicon{font-size:1.2rem;}
+
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--card);border:1px solid var(--accent);border-radius:12px;padding:8px 18px;font-size:0.82rem;color:var(--accent3);font-family:'Space Grotesk',sans-serif;opacity:0;transition:all 0.3s;z-index:999;pointer-events:none;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-@media(max-width:480px){.scene-emoji{font-size:2.6rem;top:10px;right:12px;}.scene-txt{max-width:70%;}}
+@media(max-width:480px){
+  .cat-grid{grid-template-columns:1fr 1fr;}
+  .ck-illus{width:70px;font-size:2.4rem;}
+  .ck-scene-txt{max-width:calc(100% - 70px);}
+}
 </style>
 </head>
 <body>
 
+<!-- HEADER -->
 <div class="header">
-  <div class="logo">🔥 西語鍛造 <span>v3 · 語塊版</span></div>
-  <div class="stats-row">
-    <div class="chip s">🔥<span class="v" id="sStr">0</span></div>
-    <div class="chip w">📚<span class="v" id="sDone">0</span></div>
-    <div class="chip">⚡<span class="v" id="sXP">0</span></div>
+  <div class="logo">🔥 西語鍛造 <span>v4</span></div>
+  <div class="hstats">
+    <div class="chip s">🔥<span class="v" id="hStreak">0</span></div>
+    <div class="chip done">✅<span class="v" id="hDone">0</span></div>
+    <div class="chip">⚡<span class="v" id="hXP">0</span></div>
   </div>
 </div>
 
-<div class="wrap">
+<!-- ══ HOME VIEW ══ -->
+<div class="view active" id="viewHome">
+<div class="home-wrap">
 
-<div class="xp-box">
-  <div class="xp-top"><div class="xp-lbl">今日進度</div><div class="xp-num" id="xpDisp">0 / 100 XP</div></div>
-  <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
-  <div class="xp-lvl" id="xpLvl">Lv.1 初鍛者</div>
-</div>
-
-<div class="voice-bar">
-  <label>🔊 西語音源</label>
-  <select id="voiceSel"><option value="">偵測中…</option></select>
-  <button class="vtest" onclick="testVoice()">試聽</button>
-  <span class="vstatus" id="vStat">偵測中…</span>
-</div>
-
-<div class="cat-section">
-  <div class="sec-label">🎭 情境分類</div>
-  <div class="cat-row" id="catRow"></div>
-  <div class="progress-row">
-    <div class="prog-lbl">已練</div>
-    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
-    <div class="prog-num" id="progNum">0 / 0</div>
-  </div>
-</div>
-
-<div class="gen-wrap">
-  <button class="btn-gen" onclick="nextChallenge()">✨ 出題</button>
-</div>
-
-<div class="c-card" id="cCard" style="display:none">
-  <div class="scene" id="scene">
-    <div class="scene-emoji" id="sceneEmoji">🌟</div>
-    <div class="scene-meta">
-      <div class="day-badge" id="dayBadge">語塊 #1</div>
-      <div class="cat-tag" id="catTag">日常</div>
+  <!-- XP -->
+  <div class="xp-box">
+    <div class="xp-top"><div class="xp-lbl">學習進度</div><div class="xp-num" id="xpDisp">0 / 100 XP</div></div>
+    <div class="xp-track"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+    <div class="xp-row2">
+      <div class="xp-lvl" id="xpLvl">Lv.1 初鍛者</div>
+      <div class="streak-badge"><span>🔥</span><span id="xpStreak">0 天連續</span></div>
     </div>
-    <div class="scene-lbl">🎭 情境</div>
-    <div class="scene-txt" id="sceneTxt">—</div>
   </div>
 
-  <div class="chunk-block">
-    <div class="chunk-lbl">🧩 今日語塊</div>
-    <div class="chunk-card">
-      <div class="chunk-es">
-        <span id="chunkEs">—</span>
-        <button class="chunk-play" id="chunkPlay" onclick="playChunk()" title="朗讀">▶</button>
-      </div>
-      <!-- EN collapsible -->
-      <div class="lang-row">
-        <button class="ltog" id="enTog" onclick="toggleL('en')">
-          <span class="ltlbl">🇬🇧 English + 英西對照</span>
-          <span class="ltarr">▾</span>
-        </button>
-        <div class="lcont" id="enCont">
-          <span class="en-text" id="chunkEn">—</span>
-          <span class="en-note" id="chunkEnNote"></span>
-        </div>
-      </div>
-      <!-- ZH collapsible -->
-      <div class="lang-row">
-        <button class="ltog" id="zhTog" onclick="toggleL('zh')">
-          <span class="ltlbl">🈳 中文意思</span>
-          <span class="ltarr">▾</span>
-        </button>
-        <div class="lcont" id="zhCont">
-          <span class="zh-text" id="chunkZh">—</span>
-        </div>
+  <!-- FULL-STREAK BANNER -->
+  <div class="streak-banner" id="streakBanner">
+    <div class="sb-icon">🎉</div>
+    <div class="sb-text">
+      <div class="sb-title" id="sbTitle">連續 7 天！+50 XP 獎勵</div>
+      <div class="sb-sub">繼續保持全勤，下一個里程碑：14 天</div>
+    </div>
+  </div>
+
+  <!-- VOICE -->
+  <div class="voice-bar">
+    <label>🔊 西語音源</label>
+    <select id="voiceSel"><option value="">偵測中…</option></select>
+    <button class="vtest" onclick="testVoice()">試聽</button>
+    <span class="vstatus" id="vStat">偵測中…</span>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="cat-grid-label">選擇情境分類</div>
+  <div class="cat-grid" id="catGrid"></div>
+
+  <!-- 語塊存摺 BUTTON -->
+  <button class="pasaporte-btn" onclick="showView('viewPasaporte')">
+    <div class="pb-icon">📒</div>
+    <div class="pb-text">
+      <div class="pb-title">語塊存摺</div>
+      <div class="pb-sub" id="pbSub">查看已學語塊 · 全勤紀錄</div>
+    </div>
+    <div class="pb-arrow">›</div>
+  </button>
+
+</div>
+</div>
+
+<!-- ══ CATEGORY VIEW ══ -->
+<div class="view" id="viewCat">
+<div class="cat-view-wrap">
+  <button class="back-btn" onclick="showView('viewHome')">‹ 返回</button>
+  <div class="cat-header">
+    <div class="ch-top">
+      <div class="ch-emoji" id="cvEmoji">☀️</div>
+      <div class="ch-info">
+        <div class="ch-name" id="cvName">早晨</div>
+        <div class="ch-sub" id="cvSub">3 個語塊</div>
       </div>
     </div>
-  </div>
-
-  <div class="input-zone">
-    <div class="input-lbl">✍️ 用這個語塊造一句話</div>
-    <textarea class="ans-input" id="ansIn" placeholder="直接寫出西語句子，語感對就好" rows="3"></textarea>
-    <div class="input-actions">
-      <div class="input-hint" id="inputHint">試著說出一個情境句</div>
-      <button class="btn btn-ghost btn-sm" onclick="skipIt()">跳過</button>
-      <button class="btn btn-submit" onclick="checkAns()">送出 →</button>
+    <div class="ch-prog-row">
+      <div class="ch-prog-bar"><div class="ch-prog-fill" id="cvProgFill" style="width:0%"></div></div>
+      <div class="ch-prog-num" id="cvProgNum">0 / 0 已看過</div>
     </div>
   </div>
-
-  <div class="fb-zone" id="fbZone">
-    <div class="fb-head">
-      <div class="fb-icon" id="fbIcon">—</div>
-      <div class="fb-title" id="fbTitle">—</div>
-      <div class="xp-gained" id="xpGain"></div>
-    </div>
-    <div class="fb-body" id="fbBody"></div>
-    <div class="answer-review" id="ansReview">
-      <div class="review-row">
-        <span class="review-lbl">你</span>
-        <span class="review-txt yours" id="revYours">—</span>
-      </div>
-      <div class="review-row">
-        <span class="review-lbl">參考</span>
-        <span class="review-txt model" id="revModel">—</span>
-      </div>
-    </div>
-    <div class="next-acts">
-      <button class="btn btn-primary btn-sm" onclick="nextChallenge()">下一個語塊 ➜</button>
-      <button class="btn btn-ghost btn-sm" onclick="replayModel()">🔊 再聽一次</button>
-      <button class="btn btn-ghost btn-sm" onclick="scrollHist()">紀錄</button>
-    </div>
-  </div>
+  <div class="chunks-list" id="chunksList"></div>
+</div>
 </div>
 
-<div class="history-sec" id="histSec">
-  <div class="sec-label">📜 練習紀錄</div>
+<!-- ══ PASAPORTE VIEW ══ -->
+<div class="view" id="viewPasaporte">
+<div class="pasaporte-wrap">
+  <button class="back-btn" onclick="showView('viewHome')">‹ 返回</button>
+
+  <div class="pasaporte-header">
+    <div class="ph-top">
+      <div class="ph-icon">📒</div>
+      <div>
+        <div class="ph-title">語塊存摺</div>
+        <div class="ph-sub">你的西語語塊學習紀錄</div>
+      </div>
+    </div>
+
+    <!-- STREAK CALENDAR (last 14 days) -->
+    <div class="streak-cal">
+      <div class="sc-label">最近 14 天全勤</div>
+      <div class="sc-dots" id="scDots"></div>
+    </div>
+
+    <!-- BONUS MILESTONES -->
+    <div class="sc-label" style="margin-top:12px">全勤里程碑</div>
+    <div class="bonus-row" id="bonusRow"></div>
+  </div>
+
+  <div class="hist-section-lbl">已學語塊</div>
   <div class="hist-list" id="histList"></div>
 </div>
-
 </div>
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" id="nav0" onclick="showView('viewHome')"><span class="nicon">🏠</span>首頁</button>
+  <button class="nav-btn" id="nav1" onclick="showCatFromNav()"><span class="nicon">🧩</span>語塊</button>
+  <button class="nav-btn" id="nav2" onclick="showView('viewPasaporte')"><span class="nicon">📒</span>存摺</button>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
-// ══════════════════════════════════════
-// 語塊題庫 — 佩佩豬日常情境
-// ══════════════════════════════════════
+// ══════════════════════════════════
+// 語塊題庫
+// ══════════════════════════════════
 const CHUNKS = [
-  // ── 起床 / 早晨 ──
-  {id:'m1', cat:'☀️ 早晨', emoji:'☀️', situation:'早上孩子剛醒來，你走進房間，陽光剛剛灑進來',
-   es:'¡Buenos días!', en:'Good morning!', enNote:'英西結構相同：直接感嘆句，不需主詞', zh:'早安！', hint:'開啟一天的第一句話', model:'¡Buenos días, mi amor!'},
-  {id:'m2', cat:'☀️ 早晨', emoji:'☀️', situation:'孩子還賴在床上不想起來，你輕聲催促',
-   es:'Es hora de levantarse.', en:"It's time to get up.", enNote:'es hora de + 動詞原形 ＝ it\'s time to', zh:'該起床了。', hint:'用 es hora de 帶出行動', model:'Venga, es hora de levantarse.'},
-  {id:'m3', cat:'☀️ 早晨', emoji:'☀️', situation:'問孩子昨晚睡得好不好',
-   es:'¿Has dormido bien?', en:'Did you sleep well?', enNote:'西語用現在完成式（has dormido），英語用過去簡單式', zh:'你睡得好嗎？', hint:'問候的延伸，比 buenos días 更深一層', model:'¿Has dormido bien, cariño?'},
+  // ☀️ 早晨
+  {id:'m1',cat:'☀️ 早晨',illus:'🌅',
+   situation:'早上孩子剛醒來，你走進房間，陽光灑進來的<em>那一刻</em>',
+   es:'¡Buenos días!',
+   breakdown:[
+     {chunk:'¡Buenos días!',zh:'早安！',role:'打招呼'},
+   ],
+   en:'Good morning!',enNote:'英西結構完全相同，感嘆句，不需要主詞',
+   zh:'早安！',
+   model:'¡Buenos días, mi amor! ¿Has dormido bien?'},
 
-  // ── 吃飯 ──
-  {id:'e1', cat:'🍽️ 吃飯', emoji:'🍽️', situation:'叫孩子來吃飯，飯已經準備好了',
-   es:'¡A comer!', en:"Let's eat! / Come and eat!", enNote:'¡A + 動詞原形！是西語特有的呼喚結構，英語無直接對應', zh:'來吃飯了！', hint:'短促有力，媽媽呼喚家人的經典句', model:'¡A comer, que se enfría!'},
-  {id:'e2', cat:'🍽️ 吃飯', emoji:'🍽️', situation:'孩子說肚子餓，你問他想吃什麼',
-   es:'Tengo mucha hambre.', en:'I\'m very hungry.', enNote:'西語用 tener（有）hambre，英語用 be（是）hungry，概念不同', zh:'我很餓。', hint:'tener hambre 是整個語塊，不能拆', model:'Tengo mucha hambre, ¿qué hay para comer?'},
-  {id:'e3', cat:'🍽️ 吃飯', emoji:'🍽️', situation:'飯很好吃，孩子吃得很開心',
-   es:'¡Qué rico!', en:'How delicious! / So yummy!', enNote:'¡Qué + 形容詞！ ＝ How + 形容詞！感嘆句結構一樣', zh:'好好吃！', hint:'可以在任何好吃的場合用', model:'¡Qué rico está todo!'},
-  {id:'e4', cat:'🍽️ 吃飯', emoji:'🍽️', situation:'你不想讓孩子浪費食物',
-   es:'No desperdicies la comida.', en:'Don\'t waste food.', enNote:'No + 命令式（負面命令），西英結構相同', zh:'不要浪費食物。', hint:'desperdiciar 是「浪費」這個動詞整塊記', model:'No desperdicies la comida, hay niños que pasan hambre.'},
+  {id:'m2',cat:'☀️ 早晨',illus:'⏰',
+   situation:'孩子<em>還賴在床上</em>不想起來，你輕聲催促',
+   es:'Es hora de levantarse.',
+   breakdown:[
+     {chunk:'Es hora de',zh:'是⋯⋯的時候了',role:'固定語塊'},
+     {chunk:'levantarse',zh:'起床（起身）',role:'反身動詞'},
+   ],
+   en:"It's time to get up.",enNote:'es hora de + 動詞原形 ＝ it\'s time to + 動詞，結構一樣',
+   zh:'該起床了。',
+   model:'Venga, es hora de levantarse. ¡Ya es tarde!'},
 
-  // ── 玩耍 ──
-  {id:'p1', cat:'🧸 玩耍', emoji:'🧸', situation:'孩子想一起玩，你也願意加入',
-   es:'¡Vamos a jugar!', en:"Let's play!", enNote:'¡Vamos a + 動詞原形！＝ Let\'s + 動詞，提議一起做某事', zh:'我們來玩吧！', hint:'vamos a 是最好用的提議語塊', model:'¡Vamos a jugar en el jardín!'},
-  {id:'p2', cat:'🧸 玩耍', emoji:'🧸', situation:'孩子玩得很開心，在院子裡跑跳',
-   es:'¡Qué divertido!', en:'How fun! / So much fun!', enNote:'¡Qué + 形容詞！感嘆結構，英語用 How fun', zh:'好好玩！', hint:'表達開心情緒最自然的感嘆', model:'¡Qué divertido es jugar en el parque!'},
-  {id:'p3', cat:'🧸 玩耍', emoji:'🧸', situation:'你要孩子輪流玩，學習等待',
-   es:'Hay que esperar tu turno.', en:'You have to wait your turn.', enNote:'hay que + 動詞原形 表示「必須」，比 tienes que 更中性', zh:'要等你的順序。', hint:'hay que 不針對任何人，語氣溫和', model:'Hay que esperar tu turno, todos quieren jugar.'},
-  {id:'p4', cat:'🧸 玩耍', emoji:'🧸', situation:'孩子做到了一件難的事，你替他開心',
-   es:'¡Lo has conseguido!', en:'You did it! / You made it!', enNote:'conseguir ≈ achieve/manage，比 hacer 更有「努力達成」的感', zh:'你做到了！', hint:'比 ¡muy bien! 更有力量的鼓勵', model:'¡Lo has conseguido! ¡Estoy muy orgullosa de ti!'},
+  {id:'m3',cat:'☀️ 早晨',illus:'😴',
+   situation:'問孩子昨晚睡得好不好，摸摸他的頭',
+   es:'¿Has dormido bien?',
+   breakdown:[
+     {chunk:'¿Has dormido',zh:'你（有）睡了嗎',role:'現在完成式'},
+     {chunk:'bien?',zh:'好好地',role:'副詞'},
+   ],
+   en:'Did you sleep well?',enNote:'西語用現在完成式（has dormido），英語用過去簡單式（did sleep）',
+   zh:'你睡得好嗎？',
+   model:'Buenos días. ¿Has dormido bien esta noche?'},
 
-  // ── 情緒 ──
-  {id:'f1', cat:'💜 情緒', emoji:'💜', situation:'孩子哭了，你蹲下來問他怎麼了',
-   es:'¿Qué te pasa?', en:'What\'s wrong? / What\'s the matter?', enNote:'¿Qué te pasa? 字面是「什麼事發生在你身上」，英語用 What\'s wrong', zh:'你怎麼了？', hint:'溫柔詢問的第一句話', model:'¿Qué te pasa, cariño? ¿Por qué lloras?'},
-  {id:'f2', cat:'💜 情緒', emoji:'💜', situation:'孩子難過，你說不管怎樣你都陪著他',
-   es:'Estoy aquí contigo.', en:'I\'m here with you.', enNote:'結構完全相同，estar（暫時狀態）＋ 地點', zh:'我在你身邊。', hint:'最簡單也最有力量的安慰', model:'No llores, estoy aquí contigo.'},
-  {id:'f3', cat:'💜 情緒', emoji:'💜', situation:'孩子做了好事，你想說你以他為榮',
-   es:'Estoy muy orgullosa de ti.', en:'I\'m very proud of you.', enNote:'estar orgulloso/a de ＝ be proud of，介詞 de 對應 of', zh:'我非常以你為榮。', hint:'orgullosa/o 記住性別變化', model:'Estoy muy orgullosa de ti, lo has hecho muy bien.'},
-  {id:'f4', cat:'💜 情緒', emoji:'💜', situation:'孩子生氣，你幫他說出這個感受',
-   es:'Estás enfadado, ¿verdad?', en:'You\'re angry, aren\'t you?', enNote:'¿verdad? ＝ right? / aren\'t you? 附加問句', zh:'你在生氣，對嗎？', hint:'幫孩子命名情緒，不評判', model:'Estás enfadado, ¿verdad? Es normal sentirse así.'},
+  // 🍽️ 吃飯
+  {id:'e1',cat:'🍽️ 吃飯',illus:'🍲',
+   situation:'飯已經端上桌，<em>叫全家人</em>來吃飯',
+   es:'¡A comer!',
+   breakdown:[
+     {chunk:'¡A + 動詞！',zh:'來～做某事！',role:'呼喚語塊'},
+     {chunk:'comer',zh:'吃飯',role:'動詞原形'},
+   ],
+   en:"Come and eat! / Let's eat!",enNote:'¡A + 動詞原形！是西語特有呼喚結構，英語無完全對應',
+   zh:'來吃飯了！',
+   model:'¡A comer, que se enfría la sopa!'},
 
-  // ── 睡前 ──
-  {id:'n1', cat:'🌙 睡前', emoji:'🌙', situation:'準備讓孩子上床睡覺，你輕聲說',
-   es:'Es hora de dormir.', en:'It\'s time to sleep.', enNote:'es hora de + 動詞原形，跟 it\'s time to 結構一樣', zh:'該睡覺了。', hint:'睡前例行的第一句話', model:'Venga, es hora de dormir. Ya es tarde.'},
-  {id:'n2', cat:'🌙 睡前', emoji:'🌙', situation:'蓋好被子，親吻額頭，說晚安',
-   es:'Buenas noches, que duermas bien.', en:'Good night, sleep well.', enNote:'que + 虛擬式 表祝願，英語用 sleep well 祈使句', zh:'晚安，好好睡。', hint:'que duermas bien 是溫柔的祝願', model:'Buenas noches, que duermas bien y tengas dulces sueños.'},
-  {id:'n3', cat:'🌙 睡前', emoji:'🌙', situation:'孩子說要聽故事，你坐下來陪他',
-   es:'¿Te cuento un cuento?', en:'Shall I tell you a story?', enNote:'¿Te + 動詞？邀請句，英語用 Shall I', zh:'要我說個故事給你聽嗎？', hint:'contar un cuento 是固定語塊', model:'¿Te cuento un cuento antes de dormir?'},
-  {id:'n4', cat:'🌙 睡前', emoji:'🌙', situation:'燈要關了，你告訴孩子你愛他',
-   es:'Te quiero mucho.', en:'I love you so much.', enNote:'te quiero ＝ I love you（親情），te amo 較正式或浪漫', zh:'我很愛你。', hint:'quiero 不翻成 I want，這裡是愛', model:'Cierra los ojos. Te quiero mucho.'},
+  {id:'e2',cat:'🍽️ 吃飯',illus:'🤤',
+   situation:'孩子跑來說<em>肚子好餓</em>，眼睛閃閃發光',
+   es:'Tengo mucha hambre.',
+   breakdown:[
+     {chunk:'Tengo',zh:'我有',role:'動詞 tener'},
+     {chunk:'mucha',zh:'很多的',role:'形容詞（陰性）'},
+     {chunk:'hambre',zh:'飢餓感',role:'名詞（陰性）'},
+   ],
+   en:"I'm very hungry.",enNote:'西語用 tener（有）hambre，英語用 be（是）hungry — 概念根本不同，整塊記',
+   zh:'我很餓。',
+   model:'Tengo mucha hambre, ¿qué hay para comer?'},
 
-  // ── 出門 ──
-  {id:'o1', cat:'🚗 出門', emoji:'🚗', situation:'要出門了，大家準備好了嗎',
-   es:'¿Estáis todos listos?', en:'Is everyone ready?', enNote:'estar listo ＝ be ready，estar 用於狀態', zh:'大家都準備好了嗎？', hint:'listos 是複數形，對一個人說用 listo/lista', model:'¡Venga! ¿Estáis todos listos? Nos vamos.'},
-  {id:'o2', cat:'🚗 出門', emoji:'🚗', situation:'孩子跑太快，你叫他慢一點',
-   es:'¡Con cuidado!', en:'Be careful! / Careful!', enNote:'con cuidado 字面「帶著小心」，英語直接用 careful', zh:'小心！', hint:'短句，危險瞬間最有用', model:'¡Con cuidado! No corras tan rápido.'},
-  {id:'o3', cat:'🚗 出門', emoji:'🚗', situation:'到了公園，孩子很興奮地想衝出去',
-   es:'¡Qué bien se está al aire libre!', en:'It\'s so nice to be outside!', enNote:'al aire libre 是固定短語「在戶外」，整塊記', zh:'在戶外真好！', hint:'佩佩豬原句，說出大家的心情', model:'¡Qué bien se está al aire libre! Vamos a correr un poco.'},
+  {id:'e3',cat:'🍽️ 吃飯',illus:'😋',
+   situation:'孩子吃了一口，眼睛<em>瞬間發亮</em>',
+   es:'¡Qué rico!',
+   breakdown:[
+     {chunk:'¡Qué + 形容詞！',zh:'好～啊！',role:'感嘆語塊'},
+     {chunk:'rico/a',zh:'美味的',role:'形容詞'},
+   ],
+   en:'How delicious! / So yummy!',enNote:'¡Qué + 形容詞！＝ How + 形容詞！感嘆句結構完全相同',
+   zh:'好好吃！',
+   model:'¡Qué rico está todo, mamá!'},
 
-  // ── 家務 / 整理 ──
-  {id:'h1', cat:'🏠 家務', emoji:'🏠', situation:'東西太亂了，你請孩子幫忙收拾',
-   es:'Hay que recoger los juguetes.', en:'We have to tidy up the toys.', enNote:'recoger ≈ pick up/tidy up，hay que 表義務', zh:'要把玩具收好。', hint:'recoger 比 limpiar 更精確，是「收撿」', model:'Hay que recoger los juguetes antes de cenar.'},
-  {id:'h2', cat:'🏠 家務', emoji:'🏠', situation:'孩子幫你做了事，你說謝謝你',
-   es:'Muchas gracias por tu ayuda.', en:'Thank you very much for your help.', enNote:'por tu ayuda ＝ for your help，介詞 por 對應 for', zh:'非常謝謝你的幫忙。', hint:'比單說 gracias 更有溫度', model:'Muchas gracias por tu ayuda, eres muy bueno.'},
-  {id:'h3', cat:'🏠 家務', emoji:'🏠', situation:'孩子不小心打翻東西，你說沒關係',
-   es:'No pasa nada.', en:'It\'s okay. / Never mind.', enNote:'no pasa nada 字面「什麼事都沒發生」，英語無直接對應', zh:'沒關係。', hint:'西語最溫柔的安撫，沒有責怪', model:'No pasa nada, no te preocupes. Lo limpiamos juntos.'},
+  {id:'e4',cat:'🍽️ 吃飯',illus:'🌍',
+   situation:'孩子把食物推到一邊，你<em>輕聲提醒</em>不要浪費',
+   es:'No desperdicies la comida.',
+   breakdown:[
+     {chunk:'No + 命令式',zh:'不要～',role:'否定命令'},
+     {chunk:'desperdicies',zh:'浪費（你）',role:'動詞虛擬式'},
+     {chunk:'la comida',zh:'食物',role:'名詞+冠詞'},
+   ],
+   en:"Don't waste food.",enNote:'No + 虛擬式 ＝ Don\'t + 動詞，否定命令兩語結構一致',
+   zh:'不要浪費食物。',
+   model:'No desperdicies la comida, hay niños que pasan hambre.'},
 
-  // ── 學習 / 鼓勵 ──
-  {id:'l1', cat:'✨ 鼓勵', emoji:'✨', situation:'孩子剛學了新東西，你為他開心',
-   es:'¡Muy bien!', en:'Very good! / Well done!', enNote:'結構不同：西語用副詞 muy，英語用 very good 或 well done', zh:'非常好！', hint:'最萬用的鼓勵語塊', model:'¡Muy bien! ¡Lo estás haciendo genial!'},
-  {id:'l2', cat:'✨ 鼓勵', emoji:'✨', situation:'孩子快放棄了，你鼓勵他再試一次',
-   es:'¡Inténtalo otra vez!', en:'Try again!', enNote:'intentar ＝ try，otra vez ＝ again，比 de nuevo 口語', zh:'再試一次！', hint:'¡Inténtalo! 整塊是「去試它」', model:'¡No te rindas! ¡Inténtalo otra vez!'},
-  {id:'l3', cat:'✨ 鼓勵', emoji:'✨', situation:'孩子說「我不會」，你告訴他可以做到',
-   es:'Tú puedes.', en:'You can do it.', enNote:'puedes ＝ can（能力），you can do it 英語多了 do it', zh:'你可以的。', hint:'最簡短有力的信任', model:'Tú puedes, yo sé que sí.'},
+  // 🧸 玩耍
+  {id:'p1',cat:'🧸 玩耍',illus:'🌳',
+   situation:'孩子在客廳看著你，<em>眼神充滿期待</em>，想一起玩',
+   es:'¡Vamos a jugar!',
+   breakdown:[
+     {chunk:'¡Vamos a + 動詞！',zh:'我們去～吧！',role:'提議語塊'},
+     {chunk:'jugar',zh:'玩',role:'動詞原形'},
+   ],
+   en:"Let's play!",enNote:'¡Vamos a + 動詞！＝ Let\'s + 動詞，提議一起做某事，結構一樣',
+   zh:'我們來玩吧！',
+   model:'¡Vamos a jugar en el jardín! Hace buen tiempo.'},
+
+  {id:'p2',cat:'🧸 玩耍',illus:'😄',
+   situation:'孩子跳來跳去，<em>完全停不下來</em>的快樂',
+   es:'¡Qué divertido!',
+   breakdown:[
+     {chunk:'¡Qué + 形容詞！',zh:'好～啊！',role:'感嘆語塊'},
+     {chunk:'divertido',zh:'好玩的、有趣的',role:'形容詞'},
+   ],
+   en:'How fun! / So much fun!',enNote:'¡Qué divertido! 是情緒感嘆，整塊背，不需拆解',
+   zh:'好好玩！',
+   model:'¡Qué divertido! ¡Jugamos otra vez!'},
+
+  {id:'p3',cat:'🧸 玩耍',illus:'⏳',
+   situation:'兩個孩子都想要同一個玩具，你<em>平靜地說</em>',
+   es:'Hay que esperar tu turno.',
+   breakdown:[
+     {chunk:'Hay que + 動詞',zh:'必須～（無主詞）',role:'義務語塊'},
+     {chunk:'esperar',zh:'等待',role:'動詞原形'},
+     {chunk:'tu turno',zh:'你的順序',role:'名詞片語'},
+   ],
+   en:'You have to wait your turn.',enNote:'hay que 比 tienes que 更中性，不針對任何人',
+   zh:'要等你的順序。',
+   model:'Tranquilo, hay que esperar tu turno.'},
+
+  {id:'p4',cat:'🧸 玩耍',illus:'🏆',
+   situation:'孩子終於做到了一直做不到的事，<em>滿臉驚喜</em>',
+   es:'¡Lo has conseguido!',
+   breakdown:[
+     {chunk:'Lo',zh:'它（這件事）',role:'受詞代名詞'},
+     {chunk:'has conseguido',zh:'你做到了、你實現了',role:'現在完成式'},
+   ],
+   en:'You did it! / You made it!',enNote:'conseguir ＝ manage to achieve，比 hacer 更有「努力達成」的份量',
+   zh:'你做到了！',
+   model:'¡Lo has conseguido! ¡Estoy muy orgullosa de ti!'},
+
+  // 💜 情緒
+  {id:'f1',cat:'💜 情緒',illus:'🥺',
+   situation:'孩子突然哭了，你蹲下來，<em>眼神與他平視</em>',
+   es:'¿Qué te pasa?',
+   breakdown:[
+     {chunk:'¿Qué',zh:'什麼',role:'疑問詞'},
+     {chunk:'te',zh:'你（間接受詞）',role:'代名詞'},
+     {chunk:'pasa?',zh:'發生了',role:'動詞 pasar'},
+   ],
+   en:"What's wrong? / What's the matter?",enNote:'字面是「什麼事情發生在你身上」，英語說 What\'s wrong',
+   zh:'你怎麼了？',
+   model:'¿Qué te pasa, cariño? ¿Por qué lloras?'},
+
+  {id:'f2',cat:'💜 情緒',illus:'🫂',
+   situation:'孩子害怕，你<em>安靜地坐在他旁邊</em>',
+   es:'Estoy aquí contigo.',
+   breakdown:[
+     {chunk:'Estoy aquí',zh:'我在這裡',role:'位置狀態'},
+     {chunk:'contigo',zh:'和你在一起',role:'介詞+代名詞'},
+   ],
+   en:"I'm here with you.",enNote:'結構完全相同，estar（暫時狀態）+ 地點 + 陪伴',
+   zh:'我在你身邊。',
+   model:'No tengas miedo. Estoy aquí contigo.'},
+
+  {id:'f3',cat:'💜 情緒',illus:'🌟',
+   situation:'孩子幫助了弟弟妹妹，<em>那一刻你很驕傲</em>',
+   es:'Estoy muy orgullosa de ti.',
+   breakdown:[
+     {chunk:'Estoy muy orgullosa',zh:'我非常以⋯⋯為榮',role:'情感狀態'},
+     {chunk:'de ti',zh:'因為你',role:'介詞片語'},
+   ],
+   en:"I'm very proud of you.",enNote:'estar orgulloso/a de ＝ be proud of，介詞 de 對應英語 of',
+   zh:'我非常以你為榮。',
+   model:'Estoy muy orgullosa de ti. Lo has hecho muy bien.'},
+
+  {id:'f4',cat:'💜 情緒',illus:'😤',
+   situation:'孩子緊握著拳頭，<em>臉紅了</em>，你幫他說出來',
+   es:'Estás enfadado, ¿verdad?',
+   breakdown:[
+     {chunk:'Estás enfadado',zh:'你在生氣',role:'情緒狀態'},
+     {chunk:'¿verdad?',zh:'對嗎？',role:'附加問句'},
+   ],
+   en:"You're angry, aren't you?",enNote:'¿verdad? ＝ right? / aren\'t you?，附加問句結構西語更簡單',
+   zh:'你在生氣，對嗎？',
+   model:'Estás enfadado, ¿verdad? Es normal sentirse así.'},
+
+  // 🌙 睡前
+  {id:'n1',cat:'🌙 睡前',illus:'🛏️',
+   situation:'燈光調暗，孩子還在玩，你<em>輕聲說</em>',
+   es:'Es hora de dormir.',
+   breakdown:[
+     {chunk:'Es hora de',zh:'是⋯⋯的時候了',role:'固定語塊'},
+     {chunk:'dormir',zh:'睡覺',role:'動詞原形'},
+   ],
+   en:"It's time to sleep.",enNote:'es hora de + 動詞原形 ＝ it\'s time to + 動詞，一對一',
+   zh:'該睡覺了。',
+   model:'Venga, es hora de dormir. Ya es tarde.'},
+
+  {id:'n2',cat:'🌙 睡前',illus:'💋',
+   situation:'蓋好被子，親吻額頭，<em>最後一句話</em>',
+   es:'Buenas noches, que duermas bien.',
+   breakdown:[
+     {chunk:'Buenas noches',zh:'晚安',role:'打招呼'},
+     {chunk:'que duermas bien',zh:'希望你睡得好',role:'祝願句（虛擬式）'},
+   ],
+   en:'Good night, sleep well.',enNote:'que + 虛擬式 表祝願，英語用祈使句 sleep well',
+   zh:'晚安，好好睡。',
+   model:'Buenas noches, que duermas bien y tengas dulces sueños.'},
+
+  {id:'n3',cat:'🌙 睡前',illus:'📖',
+   situation:'孩子躺好了，抬頭看著你，<em>眼神充滿期待</em>',
+   es:'¿Te cuento un cuento?',
+   breakdown:[
+     {chunk:'¿Te cuento',zh:'我說給你聽嗎',role:'間接受詞 + 動詞'},
+     {chunk:'un cuento?',zh:'一個故事',role:'名詞'},
+   ],
+   en:'Shall I tell you a story?',enNote:'te cuento ＝ I tell you，動詞 contar 是「敘述、說故事」',
+   zh:'要我說個故事給你聽嗎？',
+   model:'¿Te cuento un cuento antes de dormir?'},
+
+  {id:'n4',cat:'🌙 睡前',illus:'❤️',
+   situation:'燈要關了，你在門口<em>回頭說</em>',
+   es:'Te quiero mucho.',
+   breakdown:[
+     {chunk:'Te quiero',zh:'我愛你',role:'親情愛語'},
+     {chunk:'mucho',zh:'很多、非常',role:'副詞'},
+   ],
+   en:'I love you so much.',enNote:'te quiero ＝ I love you（親情），注意不是 I want you',
+   zh:'我很愛你。',
+   model:'Cierra los ojos. Te quiero mucho, mi amor.'},
+
+  // 🚗 出門
+  {id:'o1',cat:'🚗 出門',illus:'🎒',
+   situation:'鞋子穿好了，包包拿好了，<em>你大聲問</em>',
+   es:'¿Estáis todos listos?',
+   breakdown:[
+     {chunk:'¿Estáis',zh:'你們（是）',role:'estar 複數'},
+     {chunk:'todos',zh:'大家、全部',role:'代名詞'},
+     {chunk:'listos?',zh:'準備好的',role:'形容詞（複數）'},
+   ],
+   en:'Is everyone ready?',enNote:'estar listo ＝ be ready，estar 表示「當下的狀態」',
+   zh:'大家都準備好了嗎？',
+   model:'¡Venga! ¿Estáis todos listos? Nos vamos.'},
+
+  {id:'o2',cat:'🚗 出門',illus:'⚡',
+   situation:'孩子往前衝，你<em>瞬間</em>叫住他',
+   es:'¡Con cuidado!',
+   breakdown:[
+     {chunk:'¡Con cuidado!',zh:'小心！',role:'固定語塊'},
+   ],
+   en:'Be careful! / Careful!',enNote:'con cuidado 字面「帶著小心」，整塊語塊，英語 careful 單字即可',
+   zh:'小心！',
+   model:'¡Con cuidado! No corras tan rápido.'},
+
+  {id:'o3',cat:'🚗 出門',illus:'🌿',
+   situation:'到了公園，深呼吸，<em>感受戶外的自由</em>',
+   es:'¡Qué bien se está al aire libre!',
+   breakdown:[
+     {chunk:'¡Qué bien',zh:'真好啊',role:'感嘆語塊'},
+     {chunk:'se está',zh:'（在這裡）待著',role:'非人稱表達'},
+     {chunk:'al aire libre',zh:'在戶外、在大自然中',role:'固定片語'},
+   ],
+   en:"It's so nice to be outside!",enNote:'al aire libre 是整塊固定說法，記住整塊就好',
+   zh:'在戶外真好！',
+   model:'¡Qué bien se está al aire libre! Vamos a correr un poco.'},
+
+  // 🏠 家務
+  {id:'h1',cat:'🏠 家務',illus:'🧹',
+   situation:'地板上玩具散了一地，<em>你叫孩子一起收</em>',
+   es:'Hay que recoger los juguetes.',
+   breakdown:[
+     {chunk:'Hay que',zh:'必須～（大家）',role:'義務語塊'},
+     {chunk:'recoger',zh:'撿起來、收好',role:'動詞原形'},
+     {chunk:'los juguetes',zh:'玩具（複數）',role:'名詞+冠詞'},
+   ],
+   en:'We have to tidy up the toys.',enNote:'recoger ≈ pick up / tidy up，hay que 比 tenemos que 更柔和',
+   zh:'要把玩具收好。',
+   model:'Hay que recoger los juguetes antes de cenar.'},
+
+  {id:'h2',cat:'🏠 家務',illus:'🙏',
+   situation:'孩子幫你端了碗筷，<em>你蹲下來感謝他</em>',
+   es:'Muchas gracias por tu ayuda.',
+   breakdown:[
+     {chunk:'Muchas gracias',zh:'非常謝謝',role:'感謝語塊'},
+     {chunk:'por tu ayuda',zh:'因為你的幫助',role:'介詞片語'},
+   ],
+   en:'Thank you very much for your help.',enNote:'por ＝ for（原因），por tu ayuda ＝ for your help，介詞完全對應',
+   zh:'非常謝謝你的幫忙。',
+   model:'Muchas gracias por tu ayuda, eres muy bueno.'},
+
+  {id:'h3',cat:'🏠 家務',illus:'💧',
+   situation:'孩子不小心打翻水，<em>緊張地看著你</em>',
+   es:'No pasa nada.',
+   breakdown:[
+     {chunk:'No pasa nada',zh:'沒關係、沒事',role:'固定語塊'},
+   ],
+   en:"It's okay. / Never mind.",enNote:'字面「什麼事都沒發生」，英語沒有直接對應，整塊記',
+   zh:'沒關係。',
+   model:'No pasa nada, no te preocupes. Lo limpiamos juntos.'},
+
+  // ✨ 鼓勵
+  {id:'l1',cat:'✨ 鼓勵',illus:'👏',
+   situation:'孩子完成了一道題，<em>舉手來找你確認</em>',
+   es:'¡Muy bien!',
+   breakdown:[
+     {chunk:'¡Muy bien!',zh:'非常好！',role:'固定鼓勵語'},
+   ],
+   en:'Very good! / Well done!',enNote:'最簡單萬用的讚美，配上語氣更有感',
+   zh:'非常好！',
+   model:'¡Muy bien! ¡Lo estás haciendo genial!'},
+
+  {id:'l2',cat:'✨ 鼓勵',illus:'💪',
+   situation:'孩子做了一半說「我不行了」，你<em>堅定地說</em>',
+   es:'¡Inténtalo otra vez!',
+   breakdown:[
+     {chunk:'¡Inténtalo',zh:'去試它！',role:'命令式+受詞'},
+     {chunk:'otra vez!',zh:'再一次',role:'副詞片語'},
+   ],
+   en:'Try again!',enNote:'intentar ＝ try，otra vez ＝ again，整句語塊一起記',
+   zh:'再試一次！',
+   model:'¡No te rindas! ¡Inténtalo otra vez, tú puedes!'},
+
+  {id:'l3',cat:'✨ 鼓勵',illus:'🫀',
+   situation:'孩子說「我不會」，你溫柔地看著他的眼睛',
+   es:'Tú puedes.',
+   breakdown:[
+     {chunk:'Tú',zh:'你（強調）',role:'主詞（強調用）'},
+     {chunk:'puedes',zh:'能、可以',role:'動詞 poder'},
+   ],
+   en:'You can do it.',enNote:'puedes ＝ can（能力），tú 加在前面是強調，英語 You 也一樣',
+   zh:'你可以的。',
+   model:'Tú puedes. Yo sé que sí puedes.'},
 ];
 
 // ── STATE ──
-let ST = {xp:0,streak:0,done:[],history:[],curId:null,cats:new Set(),lastDate:null};
+let ST = {xp:0,streak:0,seen:[],history:[],lastDate:null,streakDates:[]};
 const LEVELS=[{min:0,lbl:'Lv.1 初鍛者',next:100},{min:100,lbl:'Lv.2 句子編者',next:250},{min:250,lbl:'Lv.3 語感覺醒',next:450},{min:450,lbl:'Lv.4 詞海衝浪',next:700},{min:700,lbl:'Lv.5 西語思考',next:1000},{min:1000,lbl:'Lv.6 直覺流',next:9999}];
+const STREAK_BONUSES=[{days:3,xp:10},{days:7,xp:30},{days:14,xp:80},{days:21,xp:150},{days:30,xp:300}];
 
 // ── VOICE ──
 let esVoices=[];
@@ -377,169 +668,277 @@ function loadVoices(){
   const all=window.speechSynthesis?speechSynthesis.getVoices():[];
   esVoices=all.filter(v=>v.lang&&v.lang.startsWith('es'));
   const sel=document.getElementById('voiceSel'),st=document.getElementById('vStat');
-  if(!esVoices.length){sel.innerHTML='<option value="">無音源</option>';st.textContent='⚠️ 無音源（需系統安裝）';st.className='vstatus err';}
+  if(!esVoices.length){sel.innerHTML='<option value="">無音源</option>';st.textContent='⚠️ 需系統安裝西語音源';st.className='vstatus err';}
   else{sel.innerHTML=esVoices.map((v,i)=>`<option value="${i}">${v.name} (${v.lang})</option>`).join('');st.textContent=`✓ ${esVoices.length} 個音源`;st.className='vstatus ok';}
 }
-function testVoice(){speak('Hola, ¡buenos días!');}
-function speak(text){
+function testVoice(){speak('¡Hola! Buenos días.');}
+function speak(text,btnId){
   if(!window.speechSynthesis){toast('此裝置不支援語音');return;}
   speechSynthesis.cancel();
   const u=new SpeechSynthesisUtterance(text);
   const idx=parseInt(document.getElementById('voiceSel').value);
   if(esVoices[idx]){u.voice=esVoices[idx];u.lang=esVoices[idx].lang;}else{u.lang='es-ES';}
-  u.rate=0.88;speechSynthesis.speak(u);
-}
-function playChunk(){
-  const txt=document.getElementById('chunkEs').textContent;
-  if(!txt||txt==='—')return;
-  const btn=document.getElementById('chunkPlay');
-  btn.textContent='⏹';btn.classList.add('playing');
-  speak(txt);
-  setTimeout(()=>{btn.textContent='▶';btn.classList.remove('playing');},3000);
-}
-function replayModel(){
-  const cur=CHUNKS.find(c=>c.id===ST.curId);
-  if(cur)speak(cur.model);
-}
-
-// ── LANG TOGGLE ──
-function toggleL(l){
-  document.getElementById(l+'Tog').classList.toggle('open');
-  document.getElementById(l+'Cont').classList.toggle('open');
-}
-
-// ── CATEGORIES ──
-function getAllCats(){return[...new Set(CHUNKS.map(c=>c.cat))];}
-function renderCats(){
-  const row=document.getElementById('catRow');
-  row.innerHTML='';
-  getAllCats().forEach(cat=>{
-    const b=document.createElement('button');
-    b.className='cat-btn'+(ST.cats.size===0||ST.cats.has(cat)?' on':'');
-    b.textContent=cat;
-    b.onclick=()=>toggleCat(cat,b);
-    row.appendChild(b);
-  });
-  const allBtn=document.createElement('button');
-  allBtn.className='cat-btn'+(ST.cats.size===0?' on':'');
-  allBtn.textContent='全部';
-  allBtn.style.order='-1';
-  allBtn.onclick=()=>{ST.cats.clear();renderCats();};
-  row.prepend(allBtn);
-  updateProgress();
-}
-function toggleCat(cat,btn){
-  if(ST.cats.has(cat))ST.cats.delete(cat);
-  else ST.cats.add(cat);
-  renderCats();
-}
-function getPool(){
-  return ST.cats.size===0?CHUNKS:CHUNKS.filter(c=>ST.cats.has(c.cat));
-}
-function updateProgress(){
-  const pool=getPool();
-  const done=pool.filter(c=>ST.done.includes(c.id)).length;
-  const pct=pool.length?Math.round((done/pool.length)*100):0;
-  document.getElementById('progFill').style.width=pct+'%';
-  document.getElementById('progNum').textContent=`${done} / ${pool.length}`;
-  document.getElementById('sDone').textContent=ST.done.length;
-}
-
-// ── NEXT CHALLENGE ──
-function nextChallenge(){
-  const pool=getPool();
-  // 優先未做過的
-  let undone=pool.filter(c=>!ST.done.includes(c.id));
-  if(!undone.length){undone=pool;} // 全做完就重來
-  const chunk=undone[Math.floor(Math.random()*undone.length)];
-  ST.curId=chunk.id;
-  document.getElementById('cCard').style.display='block';
-  document.getElementById('cCard').className='c-card active';
-  document.getElementById('scene').style.background='linear-gradient(135deg,rgba(123,94,167,0.28) 0%,rgba(26,26,53,0.7) 100%)';
-  document.getElementById('sceneEmoji').textContent=chunk.emoji;
-  document.getElementById('dayBadge').textContent='語塊 #'+chunk.id.replace(/[a-z]/g,'');
-  document.getElementById('catTag').textContent=chunk.cat;
-  document.getElementById('sceneTxt').textContent=chunk.situation;
-  document.getElementById('chunkEs').textContent=chunk.es;
-  document.getElementById('chunkEn').textContent=chunk.en;
-  document.getElementById('chunkEnNote').textContent=chunk.enNote;
-  document.getElementById('chunkZh').textContent=chunk.zh;
-  document.getElementById('inputHint').textContent=chunk.hint;
-  document.getElementById('ansIn').value='';
-  document.getElementById('fbZone').className='fb-zone';
-  // reset toggles
-  ['en','zh'].forEach(l=>{document.getElementById(l+'Tog').classList.remove('open');document.getElementById(l+'Cont').classList.remove('open');});
-  document.getElementById('chunkPlay').textContent='▶';
-  document.getElementById('chunkPlay').classList.remove('playing');
-  document.getElementById('cCard').scrollIntoView({behavior:'smooth',block:'center'});
-}
-
-// ── CHECK ANSWER ──
-function checkAns(){
-  const ans=document.getElementById('ansIn').value.trim();
-  if(!ans){toast('先寫出你的句子');return;}
-  const cur=CHUNKS.find(c=>c.id===ST.curId);
-  if(!cur)return;
-
-  // 簡單比對：是否包含語塊本身
-  const esCore=cur.es.toLowerCase().replace(/[¡!¿?.,]/g,'').trim();
-  const ansLow=ans.toLowerCase().replace(/[¡!¿?.,]/g,'').trim();
-  const hasChunk=ansLow.includes(esCore.split(' ').slice(0,2).join(' '));
-
-  let rating,icon,title,feedback,xpGain;
-  if(hasChunk&&ans.length>cur.es.length){
-    rating='ok';icon='✨';title='太有感覺了！';
-    feedback='你不只用了語塊，還擴展了句子。這就是語感在發揮作用的樣子。';xpGain=30;
-  }else if(hasChunk){
-    rating='so-so';icon='💡';title='語塊用對了！';
-    feedback='語塊本身用得準確。試試看下次加上一點情境或感受，句子會更活。';xpGain=15;
-  }else if(ans.length>3){
-    rating='so-so';icon='💡';title='勇敢說出來！';
-    feedback='你說出了自己的句子，這很好。語塊是「'+cur.es+'」，下次試著把它放進你的句子裡。';xpGain=10;
-  }else{
-    rating='rework';icon='🔧';title='再試一次';
-    feedback='語塊是「'+cur.es+'」，試著用它完整說一個情境。例如：'+cur.model;xpGain=5;
+  u.rate=0.87;
+  if(btnId){
+    const btn=document.getElementById(btnId);
+    if(btn){btn.textContent='⏹';btn.classList.add('playing');}
+    u.onend=()=>{if(btn){btn.textContent='▶';btn.classList.remove('playing');}};
   }
-
-  ST.xp+=xpGain;
-  if(rating==='ok')ST.streak++;
-  if(!ST.done.includes(cur.id))ST.done.push(cur.id);
-
-  ST.history.unshift({id:cur.id,cat:cur.cat,answer:ans,rating,chunk:cur.es,date:new Date().toLocaleDateString('zh-TW')});
-  if(ST.history.length>60)ST.history=ST.history.slice(0,60);
-
-  document.getElementById('cCard').className='c-card '+rating;
-  document.getElementById('fbIcon').textContent=icon;
-  document.getElementById('fbTitle').textContent=title;
-  document.getElementById('fbTitle').className='fb-title '+rating;
-  document.getElementById('fbBody').textContent=feedback;
-  document.getElementById('fbBody').className='fb-body '+rating;
-  document.getElementById('xpGain').textContent='+'+xpGain+' XP';
-  document.getElementById('revYours').textContent=ans;
-  document.getElementById('revModel').textContent=cur.model;
-  document.getElementById('fbZone').className='fb-zone vis';
-
-  renderStats();updateXP();updateProgress();renderHistory();save();
-  if(rating==='ok')setTimeout(()=>toast('✨ +'+xpGain+' XP！'),200);
-
-  // 自動播放示範句
-  setTimeout(()=>speak(cur.model),600);
+  speechSynthesis.speak(u);
 }
 
-function skipIt(){
-  const cur=CHUNKS.find(c=>c.id===ST.curId);
-  if(cur&&!ST.done.includes(cur.id)){}
-  document.getElementById('cCard').style.display='none';
-  toast('跳過');
+// ── VIEWS ──
+let currentCat=null;
+function showView(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>{
+    const map={viewHome:0,viewCat:1,viewPasaporte:2};
+    b.classList.toggle('active',map[id]===i);
+  });
+  if(id==='viewPasaporte')renderPasaporte();
+  if(id==='viewHome')renderHome();
+  window.scrollTo(0,0);
+}
+function showCatFromNav(){
+  if(currentCat)showCatView(currentCat);
+  else showView('viewHome');
 }
 
-// ── STATS / XP ──
-function renderStats(){
-  document.getElementById('sStr').textContent=ST.streak;
-  document.getElementById('sDone').textContent=ST.done.length;
-  document.getElementById('sXP').textContent=ST.xp;
+// ── HOME ──
+function getAllCats(){
+  const order=['☀️ 早晨','🍽️ 吃飯','🧸 玩耍','💜 情緒','🌙 睡前','🚗 出門','🏠 家務','✨ 鼓勵'];
+  return order.filter(c=>CHUNKS.some(ch=>ch.cat===c));
 }
-function updateXP(){
+
+function renderHome(){
+  const grid=document.getElementById('catGrid');
+  grid.innerHTML='';
+  const cats=getAllCats();
+  const COLORS={'☀️ 早晨':'rgba(245,200,66,0.08)','🍽️ 吃飯':'rgba(251,146,60,0.08)','🧸 玩耍':'rgba(167,139,250,0.08)','💜 情緒':'rgba(248,113,113,0.08)','🌙 睡前':'rgba(96,165,250,0.08)','🚗 出門':'rgba(74,222,128,0.08)','🏠 家務':'rgba(167,139,250,0.06)','✨ 鼓勵':'rgba(245,200,66,0.06)'};
+  cats.forEach(cat=>{
+    const chunks=CHUNKS.filter(c=>c.cat===cat);
+    const seenCount=chunks.filter(c=>ST.seen.includes(c.id)).length;
+    const pct=chunks.length?Math.round(seenCount/chunks.length*100):0;
+    const done=seenCount===chunks.length&&chunks.length>0;
+    const emoji=cat.split(' ')[0];
+    const name=cat.split(' ').slice(1).join(' ');
+    const card=document.createElement('div');
+    card.className='cat-card';
+    card.style.setProperty('--cat-color',COLORS[cat]||'');
+    card.innerHTML=`${done?'<div class="cat-done-badge">✓ 完成</div>':''}
+      <span class="cat-emoji-big">${emoji}</span>
+      <div class="cat-name">${name}</div>
+      <div class="cat-count">${chunks.length} 個語塊 · 已看 ${seenCount}</div>
+      <div class="cat-prog"><div class="cat-prog-fill" style="width:${pct}%"></div></div>`;
+    card.onclick=()=>showCatView(cat);
+    grid.appendChild(card);
+  });
+  document.getElementById('pbSub').textContent=`已學 ${ST.seen.length} 個語塊 · 連續 ${ST.streak} 天`;
+  updateXPBar();
+  renderStreakBanner();
+}
+
+function renderStreakBanner(){
+  const banner=document.getElementById('streakBanner');
+  const bonus=STREAK_BONUSES.filter(b=>ST.streak>=b.days).pop();
+  if(bonus&&ST.streak>0){
+    banner.classList.add('vis');
+    document.getElementById('sbTitle').textContent=`連續 ${ST.streak} 天！+${bonus.xp} XP 里程碑`;
+  }else{banner.classList.remove('vis');}
+}
+
+// ── CATEGORY VIEW ──
+function showCatView(cat){
+  currentCat=cat;
+  const chunks=CHUNKS.filter(c=>c.cat===cat);
+  const emoji=cat.split(' ')[0];
+  const name=cat.split(' ').slice(1).join(' ');
+  document.getElementById('cvEmoji').textContent=emoji;
+  document.getElementById('cvName').textContent=name;
+  document.getElementById('cvSub').textContent=`${chunks.length} 個語塊`;
+  updateCatProg(cat);
+  renderChunks(cat);
+  showView('viewCat');
+}
+
+function updateCatProg(cat){
+  const chunks=CHUNKS.filter(c=>c.cat===cat);
+  const seen=chunks.filter(c=>ST.seen.includes(c.id)).length;
+  const pct=chunks.length?Math.round(seen/chunks.length*100):0;
+  document.getElementById('cvProgFill').style.width=pct+'%';
+  document.getElementById('cvProgNum').textContent=`${seen} / ${chunks.length} 已看過`;
+}
+
+function renderChunks(cat){
+  const list=document.getElementById('chunksList');
+  const chunks=CHUNKS.filter(c=>c.cat===cat);
+  list.innerHTML='';
+  chunks.forEach(ch=>{
+    const isSeen=ST.seen.includes(ch.id);
+    const card=document.createElement('div');
+    card.className='chunk-card'+(isSeen?' seen':'');
+    card.id='ck_'+ch.id;
+
+    const bdRows=ch.breakdown.map(b=>`
+      <tr>
+        <td class="td-chunk">${b.chunk}</td>
+        <td class="td-zh">${b.zh}</td>
+        <td class="td-role"><span>${b.role}</span></td>
+      </tr>`).join('');
+
+    card.innerHTML=`
+      <div class="ck-scene">
+        <div class="ck-illus">${ch.illus}</div>
+        <div class="ck-scene-txt">${ch.situation}</div>
+      </div>
+      <div class="ck-es-row">
+        <div class="ck-es">${ch.es}</div>
+        <button class="play-btn" id="play_${ch.id}" onclick="speak('${ch.es.replace(/'/g,"\\'")}','play_${ch.id}')">▶</button>
+      </div>
+      <div class="breakdown">
+        <div class="bd-label">🧩 語塊拆解</div>
+        <table class="bd-table">
+          <thead><tr><th>語塊</th><th>中文</th><th>功能</th></tr></thead>
+          <tbody>${bdRows}</tbody>
+        </table>
+      </div>
+      <div class="lang-rows">
+        <div style="border-top:1px solid var(--border)">
+          <button class="ltog" id="en_${ch.id}" onclick="toggleL('en_${ch.id}','enc_${ch.id}')">
+            <span class="ltlbl">🇬🇧 English + 英西對照</span>
+            <span class="ltarr">▾</span>
+          </button>
+          <div class="lcont" id="enc_${ch.id}">
+            <div class="lcont-inner">
+              <span class="en-text">${ch.en}</span>
+              <span class="en-note">${ch.enNote}</span>
+            </div>
+          </div>
+        </div>
+        <div style="border-top:1px solid var(--border)">
+          <button class="ltog" id="zh_${ch.id}" onclick="toggleL('zh_${ch.id}','zhc_${ch.id}')">
+            <span class="ltlbl">🈳 中文意思</span>
+            <span class="ltarr">▾</span>
+          </button>
+          <div class="lcont" id="zhc_${ch.id}">
+            <div class="lcont-inner">
+              <span class="zh-text">${ch.zh}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="model-row">
+        <span class="model-lbl">示範句</span>
+        <span class="model-es">${ch.model}</span>
+        <button class="play-btn" id="mplay_${ch.id}" onclick="speak('${ch.model.replace(/'/g,"\\'")}','mplay_${ch.id}')" style="background:rgba(74,222,128,0.3);color:var(--green);border:1px solid rgba(74,222,128,0.3)">▶</button>
+      </div>
+      <div class="ck-footer">
+        <button class="btn-seen" id="seen_${ch.id}" onclick="markSeen('${ch.id}')">
+          ${isSeen?'✅ 已學過':'○ 標記已學'}
+        </button>
+        <span class="xp-tag">${isSeen?'已獲 +10 XP':'+10 XP'}</span>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+function toggleL(togId,contId){
+  document.getElementById(togId).classList.toggle('open');
+  document.getElementById(contId).classList.toggle('open');
+}
+
+function markSeen(id){
+  const ch=CHUNKS.find(c=>c.id===id);
+  if(!ch)return;
+  const wasNew=!ST.seen.includes(id);
+  if(wasNew){
+    ST.seen.push(id);
+    ST.xp+=10;
+    ST.history.unshift({id,cat:ch.cat,es:ch.es,emoji:ch.illus,date:new Date().toLocaleDateString('zh-TW'),xp:10});
+    if(ST.history.length>100)ST.history=ST.history.slice(0,100);
+    checkStreakToday();
+    toast('✅ 已學 +10 XP');
+  }
+  document.getElementById('ck_'+id).classList.add('seen');
+  document.getElementById('seen_'+id).textContent='✅ 已學過';
+  updateCatProg(currentCat);
+  renderStats();
+  updateXPBar();
+  save();
+}
+
+function checkStreakToday(){
+  const today=new Date().toDateString();
+  if(!ST.streakDates)ST.streakDates=[];
+  if(!ST.streakDates.includes(today)){
+    ST.streakDates.push(today);
+    // recalc streak
+    let s=0,d=new Date();
+    while(ST.streakDates.includes(d.toDateString())){s++;d.setDate(d.getDate()-1);}
+    const prevStreak=ST.streak;
+    ST.streak=s;
+    // bonus
+    STREAK_BONUSES.forEach(b=>{
+      if(prevStreak<b.days&&ST.streak>=b.days){ST.xp+=b.xp;toast(`🔥 ${b.days} 天全勤！+${b.xp} XP 獎勵`);}
+    });
+  }
+}
+
+// ── PASAPORTE VIEW ──
+function renderPasaporte(){
+  renderStreakCal();
+  renderBonusMilestones();
+  renderHistList();
+}
+
+function renderStreakCal(){
+  const dots=document.getElementById('scDots');
+  dots.innerHTML='';
+  const today=new Date();
+  const dates=ST.streakDates||[];
+  for(let i=13;i>=0;i--){
+    const d=new Date(today);d.setDate(d.getDate()-i);
+    const ds=d.toDateString();
+    const isToday=i===0;
+    const isDone=dates.includes(ds);
+    const el=document.createElement('div');
+    el.className='sc-dot'+(isDone?' done':'')+(isToday?' today':'');
+    el.textContent=isDone?'✓':(isToday?'今':'');
+    el.title=d.toLocaleDateString('zh-TW');
+    dots.appendChild(el);
+  }
+}
+
+function renderBonusMilestones(){
+  const row=document.getElementById('bonusRow');
+  row.innerHTML='';
+  STREAK_BONUSES.forEach(b=>{
+    const reached=ST.streak>=b.days;
+    const chip=document.createElement('div');
+    chip.className='bonus-chip'+(reached?' reached':'');
+    chip.innerHTML=`<span class="bc-streak">🔥${b.days}天</span><span class="bc-xp">+${b.xp}XP</span>${reached?'✓':''}`;
+    row.appendChild(chip);
+  });
+}
+
+function renderHistList(){
+  const list=document.getElementById('histList');
+  if(!ST.history.length){list.innerHTML='<div class="empty-hist">還沒有紀錄<br>去學習第一個語塊吧 🌟</div>';return;}
+  list.innerHTML=ST.history.slice(0,30).map(h=>`
+    <div class="hist-item">
+      <div class="hi-emoji">${h.emoji||'🧩'}</div>
+      <div class="hi-body">
+        <div class="hi-chunk">${h.es}</div>
+        <div class="hi-cat">${h.cat}</div>
+      </div>
+      <div class="hi-date">${h.date}</div>
+      <div class="hi-xp">+${h.xp}XP</div>
+    </div>`).join('');
+}
+
+// ── XP ──
+function updateXPBar(){
   const lv=LEVELS.filter(l=>ST.xp>=l.min).pop()||LEVELS[0];
   const nx=LEVELS.find(l=>l.min>ST.xp);
   const inLv=ST.xp-lv.min,need=nx?nx.min-lv.min:1;
@@ -547,38 +946,30 @@ function updateXP(){
   document.getElementById('xpFill').style.width=pct+'%';
   document.getElementById('xpDisp').textContent=nx?`${ST.xp} / ${nx.min} XP`:`${ST.xp} XP`;
   document.getElementById('xpLvl').textContent=lv.lbl;
+  document.getElementById('xpStreak').textContent=`${ST.streak} 天連續`;
 }
 
-// ── HISTORY ──
-function renderHistory(){
-  const sec=document.getElementById('histSec'),list=document.getElementById('histList');
-  if(!ST.history.length){sec.style.display='none';return;}
-  sec.style.display='block';
-  list.innerHTML=ST.history.slice(0,12).map(h=>`
-    <div class="hist-item ${h.rating}">
-      <div class="h-meta"><div class="h-day">${h.cat?.split(' ')[0]||'📌'}</div><div class="h-date">${h.date}</div></div>
-      <div style="flex:1"><div class="h-ans">${h.answer}</div><div class="h-chunk">語塊：${h.chunk}</div></div>
-    </div>`).join('');
+function renderStats(){
+  document.getElementById('hStreak').textContent=ST.streak;
+  document.getElementById('hDone').textContent=ST.seen.length;
+  document.getElementById('hXP').textContent=ST.xp;
 }
-function scrollHist(){document.getElementById('histSec').scrollIntoView({behavior:'smooth'});}
 
 // ── SAVE / LOAD ──
-function save(){ST.lastDate=new Date().toDateString();localStorage.setItem('forge_v3',JSON.stringify({...ST,cats:[...ST.cats]}));}
+function save(){localStorage.setItem('forge_v4',JSON.stringify(ST));}
 function init(){
-  const saved=localStorage.getItem('forge_v3');
-  if(saved){try{const d=JSON.parse(saved);ST={...ST,...d,cats:new Set(d.cats||[])};}catch(e){}}
-  const today=new Date().toDateString();
-  if(ST.lastDate&&ST.lastDate!==today){const yd=new Date();yd.setDate(yd.getDate()-1);if(ST.lastDate!==yd.toDateString())ST.streak=0;}
-  renderCats();renderStats();updateXP();renderHistory();
+  const saved=localStorage.getItem('forge_v4');
+  if(saved){try{ST={...ST,...JSON.parse(saved)};}catch(e){}}
+  if(!ST.streakDates)ST.streakDates=[];
+  renderStats();renderHome();
   if(window.speechSynthesis){
     if(speechSynthesis.getVoices().length)loadVoices();
     else speechSynthesis.onvoiceschanged=loadVoices;
-    setTimeout(loadVoices,800);
+    setTimeout(loadVoices,900);
   }else{document.getElementById('vStat').textContent='不支援語音';document.getElementById('vStat').className='vstatus err';}
 }
 
-// ── TOAST ──
-function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2400);}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);}
 
 document.addEventListener('DOMContentLoaded',init);
 </script>
