@@ -151,6 +151,25 @@ body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;b
 .model-lbl{font-size:0.62rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;font-family:'Space Grotesk',sans-serif;white-space:nowrap;}
 .model-es{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;color:var(--green);flex:1;}
 
+/* YOUGLISH BUTTON */
+.yg-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:rgba(239,68,68,0.15);
+  border:1px solid rgba(239,68,68,0.35);
+  color:#f87171;
+  border-radius:8px;padding:0 9px;height:32px;
+  font-family:'Space Grotesk',sans-serif;font-size:0.72rem;font-weight:700;
+  text-decoration:none;letter-spacing:0.04em;flex-shrink:0;
+  transition:all 0.15s;
+}
+.yg-btn:hover{background:rgba(239,68,68,0.28);border-color:rgba(239,68,68,0.6);}
+.yg-btn.yg-green{
+  background:rgba(74,222,128,0.12);
+  border-color:rgba(74,222,128,0.3);
+  color:var(--green);
+}
+.yg-btn.yg-green:hover{background:rgba(74,222,128,0.25);}
+
 /* SEEN BUTTON */
 .ck-footer{padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px;}
 .btn-seen{background:transparent;border:1px solid var(--border);color:var(--dim);border-radius:8px;padding:7px 14px;font-size:0.78rem;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
@@ -980,6 +999,7 @@ function renderChunks(cat){
       <div class="ck-es-row">
         <div class="ck-es">${ch.es}</div>
         <button class="play-btn" id="play_${ch.id}" onclick="speak('${ch.es.replace(/'/g,"\\'")}','play_${ch.id}')">▶</button>
+        <a class="yg-btn" href="${ygUrl(ch.es)}" target="_blank" title="YouGlish 真人發音">YG</a>
       </div>
       <div class="breakdown">
         <div class="bd-label">🧩 語塊拆解</div>
@@ -1017,6 +1037,7 @@ function renderChunks(cat){
         <span class="model-lbl">示範句</span>
         <span class="model-es">${ch.model}</span>
         <button class="play-btn" id="mplay_${ch.id}" onclick="speak('${ch.model.replace(/'/g,"\\'")}','mplay_${ch.id}')" style="background:rgba(74,222,128,0.3);color:var(--green);border:1px solid rgba(74,222,128,0.3)">▶</button>
+        <a class="yg-btn yg-green" href="${ygUrl(ch.model)}" target="_blank" title="YouGlish 真人發音">YG</a>
       </div>
       <div class="ck-footer">
         <button class="btn-seen" id="seen_${ch.id}" onclick="markSeen('${ch.id}')">
@@ -1026,6 +1047,15 @@ function renderChunks(cat){
       </div>`;
     list.appendChild(card);
   });
+}
+
+// ── YOUGLISH URL ──
+function ygUrl(text){
+  // 取前三個有意義的詞做搜尋，去掉標點
+  const clean=text.replace(/[¡!¿?.,;:""'']/g,'').trim();
+  const words=clean.split(/\s+/).slice(0,4).join('+');
+  const encoded=encodeURIComponent(words).replace(/%2B/g,'+');
+  return 'https://youglish.com/pronounce/'+encoded+'/spanish';
 }
 
 function toggleL(togId,contId){
