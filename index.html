@@ -655,6 +655,191 @@ const CHUNKS = [
    en:'You can do it.',enNote:'puedes ＝ can（能力），tú 加在前面是強調，英語 You 也一樣',
    zh:'你可以的。',
    model:'Tú puedes. Yo sé que sí puedes.'},
+
+  // ── 📍 介系詞 ──
+  {id:'pr1',cat:'📍 介系詞',illus:'📦',
+   situation:'找不到玩具，你告訴孩子<em>在箱子裡面</em>',
+   es:'Está en la caja.',
+   breakdown:[
+     {chunk:'Está',zh:'它在',role:'動詞 estar（位置）'},
+     {chunk:'en',zh:'在⋯⋯裡／上',role:'介系詞 en = in / on'},
+     {chunk:'la caja',zh:'箱子',role:'名詞+冠詞'},
+   ],
+   en:"It's in the box.",enNote:'en 同時對應 in 和 on，由情境決定；英西語序相同',
+   zh:'在箱子裡。',
+   model:'¿Dónde está el juguete? Está en la caja roja.'},
+
+  {id:'pr2',cat:'📍 介系詞',illus:'🪑',
+   situation:'球滾到桌子<em>下面</em>，孩子找不到',
+   es:'Está debajo de la mesa.',
+   breakdown:[
+     {chunk:'debajo de',zh:'在⋯⋯下面',role:'介系詞 = under / below'},
+     {chunk:'la mesa',zh:'桌子',role:'名詞+冠詞'},
+   ],
+   en:"It's under the table.",enNote:'debajo de 整塊記，de 不能省，英語 under 是單字',
+   zh:'在桌子下面。',
+   model:'¡Mira! La pelota está debajo de la mesa.'},
+
+  {id:'pr3',cat:'📍 介系詞',illus:'🐱',
+   situation:'貓跳上桌子，孩子笑著指給你看',
+   es:'El gato está encima de la mesa.',
+   breakdown:[
+     {chunk:'encima de',zh:'在⋯⋯上面',role:'介系詞 = on top of'},
+     {chunk:'la mesa',zh:'桌子',role:'名詞+冠詞'},
+   ],
+   en:'The cat is on top of the table.',enNote:'encima de ＝ on top of，比 sobre 更強調「在頂端」',
+   zh:'貓在桌子上面。',
+   model:'¡El gato está encima de la mesa otra vez!'},
+
+  {id:'pr4',cat:'📍 介系詞',illus:'🌳',
+   situation:'躲貓貓，孩子<em>藏在樹後面</em>',
+   es:'Estoy detrás del árbol.',
+   breakdown:[
+     {chunk:'detrás de',zh:'在⋯⋯後面',role:'介系詞 = behind'},
+     {chunk:'del árbol',zh:'樹（de + el 縮寫）',role:'名詞+縮合冠詞'},
+   ],
+   en:"I'm behind the tree.",enNote:'de + el → del，西語兩個字縮合，英語不縮',
+   zh:'我在樹後面。',
+   model:'¡No me encuentras! Estoy detrás del árbol.'},
+
+  {id:'pr5',cat:'📍 介系詞',illus:'🚪',
+   situation:'你站在門口<em>正前方</em>等孩子',
+   es:'Te espero delante de la puerta.',
+   breakdown:[
+     {chunk:'Te espero',zh:'我等你',role:'動詞+受詞'},
+     {chunk:'delante de',zh:'在⋯⋯前面',role:'介系詞 = in front of'},
+     {chunk:'la puerta',zh:'門',role:'名詞+冠詞'},
+   ],
+   en:"I'll wait for you in front of the door.",enNote:'delante de ＝ in front of，frente a 也可用但較正式',
+   zh:'我在門前面等你。',
+   model:'Te espero delante de la puerta del colegio.'},
+
+  {id:'pr6',cat:'📍 介系詞',illus:'🏠',
+   situation:'告訴孩子奶奶住在<em>附近</em>，很近',
+   es:'La abuela vive cerca de aquí.',
+   breakdown:[
+     {chunk:'cerca de',zh:'在⋯⋯附近',role:'介系詞 = near'},
+     {chunk:'aquí',zh:'這裡',role:'副詞（地點）'},
+   ],
+   en:'Grandma lives near here.',enNote:'cerca de ＝ near，de 後面加地點名詞；aquí ＝ here',
+   zh:'奶奶住在這附近。',
+   model:'No te preocupes, la abuela vive cerca de aquí.'},
+
+  {id:'pr7',cat:'📍 介系詞',illus:'🧒',
+   situation:'兩個孩子吵架，你請他們<em>坐在中間</em>',
+   es:'Siéntate entre nosotros.',
+   breakdown:[
+     {chunk:'Siéntate',zh:'坐下來（你）',role:'命令式+反身代詞'},
+     {chunk:'entre',zh:'在⋯⋯之間',role:'介系詞 = between'},
+     {chunk:'nosotros',zh:'我們之間',role:'人稱代名詞'},
+   ],
+   en:'Sit between us.',enNote:'entre ＝ between（兩者間）/ among（三者以上），用法相同',
+   zh:'坐到我們中間。',
+   model:'Venga, siéntate entre nosotros dos.'},
+
+  {id:'pr8',cat:'📍 介系詞',illus:'🎁',
+   situation:'孩子問禮物是<em>給誰的</em>',
+   es:'Este regalo es para ti.',
+   breakdown:[
+     {chunk:'Este regalo',zh:'這個禮物',role:'指示代名詞+名詞'},
+     {chunk:'es para',zh:'是給⋯⋯的',role:'介系詞 para = for（對象）'},
+     {chunk:'ti',zh:'你',role:'介系詞後人稱代名詞'},
+   ],
+   en:'This gift is for you.',enNote:'para ＝ for（對象/目的），por ＝ for（原因/交換），兩者不同！',
+   zh:'這個禮物是給你的。',
+   model:'¡Sorpresa! Este regalo es para ti, cariño.'},
+
+  {id:'pr9',cat:'📍 介系詞',illus:'🤝',
+   situation:'孩子害怕，你說<em>要一起去</em>',
+   es:'Voy contigo.',
+   breakdown:[
+     {chunk:'Voy',zh:'我去',role:'動詞 ir'},
+     {chunk:'contigo',zh:'和你一起',role:'con + ti 合體 = with you'},
+   ],
+   en:"I'll go with you.",enNote:'con ＝ with；con + ti 固定縮合成 contigo，不說 con ti',
+   zh:'我陪你去。',
+   model:'No tengas miedo. Voy contigo.'},
+
+  {id:'pr10',cat:'📍 介系詞',illus:'🚫',
+   situation:'孩子忘記帶東西，<em>出門沒帶傘</em>',
+   es:'Salió sin paraguas.',
+   breakdown:[
+     {chunk:'Salió',zh:'他/她出去了',role:'動詞 salir 過去式'},
+     {chunk:'sin',zh:'沒有⋯⋯、不帶',role:'介系詞 = without'},
+     {chunk:'paraguas',zh:'雨傘',role:'名詞（無冠詞）'},
+   ],
+   en:'She left without an umbrella.',enNote:'sin ＝ without，後面動詞用原形；sin + 名詞不加冠詞',
+   zh:'她出去沒帶傘。',
+   model:'¡Espera! Saliste sin paraguas y va a llover.'},
+
+  {id:'pr11',cat:'📍 介系詞',illus:'⏰',
+   situation:'孩子問要等多久，你說<em>直到爸爸回來</em>',
+   es:'Esperamos hasta que llegue papá.',
+   breakdown:[
+     {chunk:'Esperamos',zh:'我們等',role:'動詞 esperar 複數'},
+     {chunk:'hasta que',zh:'直到⋯⋯為止',role:'介系詞 hasta = until'},
+     {chunk:'llegue papá',zh:'爸爸到',role:'虛擬式（未來事件）'},
+   ],
+   en:"We wait until dad gets home.",enNote:'hasta ＝ until/to；hasta que 後接虛擬式，英語 until 後接直說式',
+   zh:'我們等到爸爸回來。',
+   model:'Esperamos aquí hasta que llegue papá, ¿vale?'},
+
+  {id:'pr12',cat:'📍 介系詞',illus:'📅',
+   situation:'孩子問從什麼時候開始學西語',
+   es:'Aprendemos español desde el lunes.',
+   breakdown:[
+     {chunk:'desde',zh:'從⋯⋯起、自從',role:'介系詞 = from / since'},
+     {chunk:'el lunes',zh:'星期一',role:'名詞+冠詞'},
+   ],
+   en:"We've been learning Spanish since Monday.",enNote:'desde ＝ since（時間起點），英語用現在完成式，西語用現在式',
+   zh:'我們從星期一開始學西語。',
+   model:'Aprendemos español desde el lunes. ¡Ya sé muchas palabras!'},
+
+  {id:'pr13',cat:'📍 介系詞',illus:'🎵',
+   situation:'孩子說他在<em>音樂課的時候</em>很快樂',
+   es:'Me gusta cantar durante la clase.',
+   breakdown:[
+     {chunk:'Me gusta',zh:'我喜歡',role:'固定語塊'},
+     {chunk:'durante',zh:'在⋯⋯期間',role:'介系詞 = during'},
+     {chunk:'la clase',zh:'課堂',role:'名詞+冠詞'},
+   ],
+   en:'I like singing during class.',enNote:'durante ＝ during，直接對應，位置也相同',
+   zh:'我喜歡在課堂上唱歌。',
+   model:'Me gusta cantar durante la clase de música.'},
+
+  {id:'pr14',cat:'📍 介系詞',illus:'📐',
+   situation:'找東西，孩子說<em>就在你旁邊</em>',
+   es:'Está al lado de ti.',
+   breakdown:[
+     {chunk:'al lado de',zh:'在⋯⋯旁邊',role:'介系詞 = next to'},
+     {chunk:'ti',zh:'你',role:'介系詞後代名詞'},
+   ],
+   en:"It's next to you.",enNote:'al lado de 整塊記，英語 next to 也是兩個字',
+   zh:'就在你旁邊。',
+   model:'¡Está al lado de ti! ¿No lo ves?'},
+
+  {id:'pr15',cat:'📍 介系詞',illus:'📖',
+   situation:'孩子問故事是<em>根據誰說的</em>',
+   es:'Según el libro, el lobo era bueno.',
+   breakdown:[
+     {chunk:'Según',zh:'根據⋯⋯、依據',role:'介系詞 = according to'},
+     {chunk:'el libro',zh:'這本書',role:'名詞+冠詞'},
+     {chunk:'el lobo era bueno',zh:'狼是好的',role:'主句'},
+   ],
+   en:'According to the book, the wolf was good.',enNote:'según ＝ according to，位置都在句首，完全對應',
+   zh:'根據這本書，狼是好人。',
+   model:'Según el libro, el lobo era bueno. ¿Qué piensas tú?'},
+
+  {id:'pr16',cat:'📍 介系詞',illus:'🏃',
+   situation:'孩子問去公園<em>要走哪條路</em>穿過去',
+   es:'Vamos al parque por este camino.',
+   breakdown:[
+     {chunk:'por',zh:'經由⋯⋯、穿過',role:'介系詞 por = through / by'},
+     {chunk:'este camino',zh:'這條路',role:'指示詞+名詞'},
+   ],
+   en:"We go to the park through this path.",enNote:'por 有很多用法（by/through/for）；這裡是「經由路徑」= through',
+   zh:'我們走這條路去公園。',
+   model:'Vamos al parque por este camino, ¿te parece?'},
 ];
 
 // ── STATE ──
@@ -707,7 +892,7 @@ function showCatFromNav(){
 
 // ── HOME ──
 function getAllCats(){
-  const order=['☀️ 早晨','🍽️ 吃飯','🧸 玩耍','💜 情緒','🌙 睡前','🚗 出門','🏠 家務','✨ 鼓勵'];
+  const order=['☀️ 早晨','🍽️ 吃飯','🧸 玩耍','💜 情緒','🌙 睡前','🚗 出門','🏠 家務','✨ 鼓勵','📍 介系詞'];
   return order.filter(c=>CHUNKS.some(ch=>ch.cat===c));
 }
 
@@ -715,7 +900,7 @@ function renderHome(){
   const grid=document.getElementById('catGrid');
   grid.innerHTML='';
   const cats=getAllCats();
-  const COLORS={'☀️ 早晨':'rgba(245,200,66,0.08)','🍽️ 吃飯':'rgba(251,146,60,0.08)','🧸 玩耍':'rgba(167,139,250,0.08)','💜 情緒':'rgba(248,113,113,0.08)','🌙 睡前':'rgba(96,165,250,0.08)','🚗 出門':'rgba(74,222,128,0.08)','🏠 家務':'rgba(167,139,250,0.06)','✨ 鼓勵':'rgba(245,200,66,0.06)'};
+  const COLORS={'☀️ 早晨':'rgba(245,200,66,0.08)','🍽️ 吃飯':'rgba(251,146,60,0.08)','🧸 玩耍':'rgba(167,139,250,0.08)','💜 情緒':'rgba(248,113,113,0.08)','🌙 睡前':'rgba(96,165,250,0.08)','🚗 出門':'rgba(74,222,128,0.08)','🏠 家務':'rgba(167,139,250,0.06)','✨ 鼓勵':'rgba(245,200,66,0.06)','📍 介系詞':'rgba(96,165,250,0.1)'};
   cats.forEach(cat=>{
     const chunks=CHUNKS.filter(c=>c.cat===cat);
     const seenCount=chunks.filter(c=>ST.seen.includes(c.id)).length;
