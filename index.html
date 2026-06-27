@@ -128,6 +128,12 @@ body::before{content:'';position:fixed;top:-20%;left:-10%;width:55%;height:55%;b
 .bd-table td{padding:7px 0;border-bottom:1px solid rgba(42,42,80,0.5);vertical-align:top;}
 .bd-table tr:last-child td{border-bottom:none;}
 .td-chunk{font-family:'Space Grotesk',sans-serif;font-size:0.92rem;color:var(--accent3);font-weight:600;width:38%;padding-right:8px;}
+.chunk-yg-link{
+  color:var(--accent3);text-decoration:none;
+  border-bottom:1.5px dashed rgba(196,181,253,0.4);
+  transition:all 0.15s;display:inline;
+}
+.chunk-yg-link:hover{color:var(--accent2);border-bottom-color:var(--accent2);}
 .td-zh{font-size:0.85rem;color:var(--muted);width:30%;padding-right:8px;}
 .td-role{font-size:0.72rem;color:var(--dim);width:32%;}
 .td-role span{background:rgba(123,94,167,0.15);border:1px solid rgba(167,139,250,0.15);border-radius:5px;padding:2px 6px;font-family:'Space Grotesk',sans-serif;}
@@ -986,7 +992,9 @@ function renderChunks(cat){
 
     const bdRows=ch.breakdown.map(b=>`
       <tr>
-        <td class="td-chunk">${b.chunk}</td>
+        <td class="td-chunk">
+          <a class="chunk-yg-link" href="${ygUrl(b.chunk)}" target="_blank">${b.chunk}</a>
+        </td>
         <td class="td-zh">${b.zh}</td>
         <td class="td-role"><span>${b.role}</span></td>
       </tr>`).join('');
@@ -999,7 +1007,6 @@ function renderChunks(cat){
       <div class="ck-es-row">
         <div class="ck-es">${ch.es}</div>
         <button class="play-btn" id="play_${ch.id}" onclick="speak('${ch.es.replace(/'/g,"\\'")}','play_${ch.id}')">▶</button>
-        <a class="yg-btn" href="${ygUrl(ch.es)}" target="_blank" title="YouGlish 真人發音">YG</a>
       </div>
       <div class="breakdown">
         <div class="bd-label">🧩 語塊拆解</div>
@@ -1037,7 +1044,6 @@ function renderChunks(cat){
         <span class="model-lbl">示範句</span>
         <span class="model-es">${ch.model}</span>
         <button class="play-btn" id="mplay_${ch.id}" onclick="speak('${ch.model.replace(/'/g,"\\'")}','mplay_${ch.id}')" style="background:rgba(74,222,128,0.3);color:var(--green);border:1px solid rgba(74,222,128,0.3)">▶</button>
-        <a class="yg-btn yg-green" href="${ygUrl(ch.model)}" target="_blank" title="YouGlish 真人發音">YG</a>
       </div>
       <div class="ck-footer">
         <button class="btn-seen" id="seen_${ch.id}" onclick="markSeen('${ch.id}')">
